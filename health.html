@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#050506">
 <meta name="color-scheme" content="dark">
 <title>Daily Stack — Customizable Template</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sync.js" defer></script>
 <script src="topbar.js" defer></script>
 <style>
 :root {
@@ -81,6 +83,21 @@ main {
   display: flex; align-items: center; gap: 12px;
 }
 .section-title::before { content: '≡'; font-size: 14px; opacity: 0.5; }
+.water-embed { margin-top: 56px; }
+.water-iframe {
+  display: block;
+  width: 100%;
+  height: 880px;
+  border: 0;
+  background: transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  color-scheme: dark;
+}
+@media (max-width: 480px) {
+  .water-embed { margin-top: 40px; }
+  .water-iframe { height: 780px; }
+}
 
 .stack-card {
   background: var(--bg-card);
@@ -494,6 +511,11 @@ main {
       </div>
     </div>
   </div>
+
+  <section id="water" class="water-embed">
+    <div class="section-title">Water Tracker</div>
+    <iframe src="po-water.html" class="water-iframe" loading="lazy" title="Water Tracker"></iframe>
+  </section>
 
   <div class="attribution">// editable template · all data stays in your browser</div>
 </main>
@@ -1012,6 +1034,17 @@ main {
   render();
   startTicker();
 })();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof initCloudSync !== 'function') return;
+  initCloudSync({
+    appKey: 'health',
+    syncedKeys: ['stack:items', 'stack:version', 'stack:low', 'po_water_v1'],
+    syncedPrefixes: ['stack:taken:'],
+    onApplied: function () { window.dispatchEvent(new Event('storage')); }
+  });
+});
 </script>
 
 </body>

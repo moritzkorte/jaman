@@ -23,6 +23,21 @@ Open any `.html` file directly in your browser — no build step, no install.
 
 Each app stores its own state in browser `localStorage`. No accounts, no server.
 
+## Cloud sync setup
+
+Supabase sync needs two public browser values:
+
+- Project URL: `https://zsngolrittdtyqhgdwxi.supabase.co`
+- Publishable key: copy it in Supabase under **Project Settings -> API**
+
+Paste both values into these constants:
+
+- `sync.js`: `SUPABASE_URL`, `SUPABASE_KEY`
+- `topbar.js`: `TOPBAR_SUPABASE_URL`, `TOPBAR_SUPABASE_KEY`
+- `gym.html`: `SUPABASE_URL`, `SUPABASE_KEY`
+
+The database migration for `app_state` and the `progress-photos` Storage bucket has already been applied to the Supabase project named `meine app`. If you use a different Supabase project later, run the SQL from the `SQL` and `Gym fix 2` files in the SQL repo again.
+
 ## Building from scratch
 
 [BUILD_DASHBOARD.md](BUILD_DASHBOARD.md) is the prompt I gave Claude to generate `index.html` — paste it into Claude if you want to rebuild that page yourself.
