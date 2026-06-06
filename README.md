@@ -1,43 +1,43 @@
-# Personal Dashboard
+# Persönliches Dashboard
 
-A set of small, self-contained HTML apps that share a top bar.
+Eine Sammlung kleiner HTML-Apps, die direkt im Browser laufen und eine gemeinsame Navigation nutzen.
 
-## Deploy your own copy
+## Eigene Kopie deployen
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FRowanThistlebrooke%2FYTdashh1)
 
-One click → Vercel signs you in, copies the repo to your GitHub, and deploys it. ~30 seconds to a live URL.
+Ein Klick → Vercel meldet dich an, kopiert das Repo in dein GitHub-Konto und deployed es. Nach kurzer Zeit hast du eine Live-URL.
 
-## How to use
+## Nutzung
 
-Open any `.html` file directly in your browser — no build step, no install.
+Du kannst jede `.html`-Datei direkt im Browser öffnen. Kein Build, keine Installation.
 
-| File | What it is |
+| Datei | Bedeutung |
 |---|---|
-| [index.html](index.html) | Goals tracker (Day Ring, Goal Ticker, To Do list) — the home page |
-| [health.html](health.html) | Supplement / daily stack tracker |
-| [po-water.html](po-water.html) | Water intake tracker |
-| [finance.html](finance.html) | Finances |
-| [gym.html](gym.html) | Progressive overload gym tracker |
-| [topbar.js](topbar.js) | Shared top bar — auto-injected into pages that `<script src="topbar.js">` |
+| [index.html](index.html) | Ziele, Tagesring und To-do-Liste — die Startseite |
+| [health.html](health.html) | Supplement- und Daily-Stack-Tracker |
+| [po-water.html](po-water.html) | Wasser-Tracker |
+| [finance.html](finance.html) | Finanzen |
+| [gym.html](gym.html) | Gym-Tracker für Progression |
+| [topbar.js](topbar.js) | Gemeinsame Navigation, die automatisch in die Seiten eingefügt wird |
 
-Each app stores its own state in browser `localStorage`. No accounts, no server.
+Jede App speichert Daten im Browser unter `localStorage`. Mit Supabase-Sync laufen die Daten zusätzlich über die Cloud.
 
-## Cloud sync setup
+## Cloud-Sync einrichten
 
-Supabase sync needs two public browser values:
+Supabase-Sync braucht zwei öffentliche Browser-Werte:
 
 - Project URL: `https://zsngolrittdtyqhgdwxi.supabase.co`
-- Publishable key: copy it in Supabase under **Project Settings -> API**
+- Publishable Key: in Supabase unter **Project Settings -> API** kopieren
 
-Paste both values into these constants:
+Beide Werte hier eintragen:
 
 - `sync.js`: `SUPABASE_URL`, `SUPABASE_KEY`
 - `topbar.js`: `TOPBAR_SUPABASE_URL`, `TOPBAR_SUPABASE_KEY`
 - `gym.html`: `SUPABASE_URL`, `SUPABASE_KEY`
 
-The database migration for `app_state` and the `progress-photos` Storage bucket has already been applied to the Supabase project named `meine app`. If you use a different Supabase project later, run the SQL from the `SQL` and `Gym fix 2` files in the SQL repo again.
+Die Datenbank für `app_state` und der Storage-Bucket `progress-photos` wurden bereits im Supabase-Projekt `meine app` angelegt. Wenn du später ein anderes Supabase-Projekt nutzt, musst du die SQL-Blöcke aus `SQL` und `Gym fix 2` dort erneut ausführen.
 
-## Building from scratch
+## Neu bauen
 
-[BUILD_DASHBOARD.md](BUILD_DASHBOARD.md) is the prompt I gave Claude to generate `index.html` — paste it into Claude if you want to rebuild that page yourself.
+[BUILD_DASHBOARD.md](BUILD_DASHBOARD.md) enthält den ursprünglichen Prompt für `index.html`.

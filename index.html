@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050506">
-<title>My Dashboard</title>
+<title>Mein Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sync.js" defer></script>
 <script src="topbar.js" defer></script>
@@ -598,16 +598,16 @@ body::after {
 <body>
 <div class="page">
 
-  <h1 class="dash-title">My Dashboard</h1>
+  <h1 class="dash-title">Mein Dashboard</h1>
 
   <div class="ticker-row">
     <div class="goal-ticker" id="goalTicker" aria-live="polite" aria-atomic="true">
       <div class="goal-ticker-led"><span class="goal-ticker-led-dot"></span></div>
-      <div class="goal-ticker-label">GOALS</div>
+      <div class="goal-ticker-label">ZIELE</div>
       <div class="goal-ticker-stage" id="goalTickerStage">
         <div class="goal-ticker-row">
           <span class="goal-ticker-status" data-status="">—</span>
-          <span class="goal-ticker-text">Loading…</span>
+          <span class="goal-ticker-text">Lädt…</span>
         </div>
       </div>
       <div class="goal-ticker-meta" id="goalTickerMeta">0/0</div>
@@ -633,40 +633,40 @@ body::after {
       </div>
     </div>
     <div class="day-ring-text">
-      <div class="day-ring-status"    id="dayRingStatus">Loading…</div>
+      <div class="day-ring-status"    id="dayRingStatus">Lädt…</div>
       <div class="day-ring-remaining" id="dayRingRemaining">—</div>
-      <div class="day-ring-hours">8:00 AM – 12:00 AM</div>
+      <div class="day-ring-hours">8:00 Uhr – 00:00 Uhr</div>
     </div>
   </div>
 
   <div class="section">
-    <div class="section-title">To Do List</div>
+    <div class="section-title">To-do-Liste</div>
 
     <!-- TODAY -->
     <div class="gm-card" id="gmCardToday">
       <div class="gm-header">
         <div class="gm-header-left">
-          <div class="gm-eyebrow" id="todayLabel">Today —</div>
+          <div class="gm-eyebrow" id="todayLabel">Heute —</div>
           <div class="gm-progress-row">
             <span class="gm-progress-num"   id="gmProgressNum">0</span>
             <span class="gm-progress-total" id="gmProgressTotal">/ 0</span>
-            <span class="gm-progress-label" id="gmProgressLabel">no goals yet</span>
+            <span class="gm-progress-label" id="gmProgressLabel">noch keine Ziele</span>
           </div>
         </div>
         <div class="gm-streak" id="gmStreak">
           <span class="gm-streak-icon">⚡</span>
           <span class="gm-streak-num" id="gmStreakNum">0</span>
-          <span>day streak</span>
+          <span>Tage-Serie</span>
         </div>
       </div>
       <div class="gm-bar" id="gmBar"></div>
       <ul id="goalList" class="goal-list gm-list"></ul>
-      <div id="emptyState" class="empty-state">No goals for today yet — add one below.</div>
-      <button type="button" id="gmPushBtn" class="gm-push-btn" style="display:none;">Push remaining to tomorrow</button>
+      <div id="emptyState" class="empty-state">Noch keine Ziele für heute — füge unten eins hinzu.</div>
+      <button type="button" id="gmPushBtn" class="gm-push-btn" style="display:none;">Offene Ziele auf morgen schieben</button>
       <div class="goal-input-wrap gm-input-wrap">
-        <input id="goalInput" class="gm-input" type="text" placeholder="Add a goal for today…" autocomplete="off">
-        <button type="button" id="goalAddBtn"    class="gm-add">+ Add</button>
-        <button type="button" id="goalPolishBtn" class="gm-polish">✨ Polish</button>
+        <input id="goalInput" class="gm-input" type="text" placeholder="Ziel für heute hinzufügen…" autocomplete="off">
+        <button type="button" id="goalAddBtn"    class="gm-add">+ Hinzufügen</button>
+        <button type="button" id="goalPolishBtn" class="gm-polish">✨ Verbessern</button>
         <div class="gm-status" id="polishStatus"></div>
       </div>
     </div>
@@ -675,17 +675,17 @@ body::after {
     <div class="gm-card gm-card-tomorrow" id="gmCardTomorrow">
       <div class="gm-header">
         <div class="gm-header-left">
-          <div class="gm-eyebrow" id="tomorrowLabel">Plan tomorrow —</div>
-          <div class="gm-tomorrow-sub">Write tonight, locked until 6 AM.</div>
+          <div class="gm-eyebrow" id="tomorrowLabel">Morgen planen —</div>
+          <div class="gm-tomorrow-sub">Heute Abend aufschreiben, ab 6 Uhr aktiv.</div>
         </div>
-        <div class="gm-tomorrow-count" id="gmTomorrowCount">0 planned</div>
+        <div class="gm-tomorrow-count" id="gmTomorrowCount">0 geplant</div>
       </div>
       <ul id="tomorrowList" class="goal-list gm-list"></ul>
-      <div id="tomorrowEmpty" class="empty-state">Nothing planned for tomorrow yet</div>
+      <div id="tomorrowEmpty" class="empty-state">Für morgen ist noch nichts geplant</div>
       <div class="goal-input-wrap gm-input-wrap">
-        <input id="tomorrowInput" class="gm-input" type="text" placeholder="Add a goal for tomorrow…" autocomplete="off">
-        <button type="button" id="tomorrowAddBtn"    class="gm-add">+ Add</button>
-        <button type="button" id="tomorrowPolishBtn" class="gm-polish">✨ Polish</button>
+        <input id="tomorrowInput" class="gm-input" type="text" placeholder="Ziel für morgen hinzufügen…" autocomplete="off">
+        <button type="button" id="tomorrowAddBtn"    class="gm-add">+ Hinzufügen</button>
+        <button type="button" id="tomorrowPolishBtn" class="gm-polish">✨ Verbessern</button>
         <div class="gm-status" id="tomorrowStatus"></div>
       </div>
     </div>
@@ -697,7 +697,7 @@ body::after {
 (function () {
   'use strict';
 
-  // Paste your Anthropic key here to enable ✨ Polish. Empty = falls back to plain add.
+  // Anthropic-Key hier einfügen, um ✨ Verbessern zu aktivieren. Leer = normal hinzufügen.
   const ANTHROPIC_API_KEY = '';
 
   const WAKE_HOUR  = 8;
@@ -744,8 +744,8 @@ body::after {
   function formatDate(yyyy_mm_dd) {
     const parts = yyyy_mm_dd.split('-').map(Number);
     const d = new Date(parts[0], parts[1] - 1, parts[2]);
-    const wk = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
-    const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+    const wk = ['So','Mo','Di','Mi','Do','Fr','Sa'][d.getDay()];
+    const mo = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'][d.getMonth()];
     return wk + ', ' + mo + ' ' + d.getDate();
   }
 
@@ -816,8 +816,8 @@ body::after {
     const goals = getGoals(todayKey());
     const total = goals.length;
     const done  = goals.filter(g => g.done).length;
-    if (total === 0) return { items: [{ status: 'empty',   text: 'No goals set for today — add one to get rolling.' }], done, total };
-    if (done === total) return { items: [{ status: 'done', text: '✓ All goals done — solid day.' }], done, total };
+    if (total === 0) return { items: [{ status: 'empty',   text: 'Noch keine Ziele für heute — leg einfach eins an.' }], done, total };
+    if (done === total) return { items: [{ status: 'done', text: '✓ Alle Ziele erledigt — starker Tag.' }], done, total };
     const items = goals.filter(g => !g.done).map(g => ({ status: 'pending', text: g.text }));
     return { items, done, total };
   }
@@ -934,10 +934,10 @@ body::after {
       fillEl.setAttribute('stroke-dashoffset', C);
       fillEl.style.stroke = '#4D4B47';
       percentEl.textContent = '—';
-      phaseEl.textContent   = 'SLEEPING';
-      statusEl.textContent  = '😴 Still sleeping';
+      phaseEl.textContent   = 'SCHLAFEN';
+      statusEl.textContent  = '😴 Noch Schlafenszeit';
       const minsUntil = (WAKE_HOUR - hours) * 60;
-      remainingEl.textContent = formatRemaining(minsUntil) + ' until wake-up';
+      remainingEl.textContent = formatRemaining(minsUntil) + ' bis zum Aufstehen';
       return;
     }
 
@@ -945,9 +945,9 @@ body::after {
       fillEl.setAttribute('stroke-dashoffset', 0);
       fillEl.style.stroke = '#E25D7A';
       percentEl.textContent = '100%';
-      phaseEl.textContent   = 'PAST BEDTIME';
-      statusEl.textContent  = '⚠️ Past bedtime';
-      remainingEl.textContent = 'Sleep!';
+      phaseEl.textContent   = 'ZU SPÄT';
+      statusEl.textContent  = '⚠️ Eigentlich Schlafenszeit';
+      remainingEl.textContent = 'Schlafen!';
       return;
     }
 
@@ -958,16 +958,16 @@ body::after {
     percentEl.textContent = Math.floor(percent) + '%';
 
     let phase, status;
-    if (percent < 25)      { phase = 'MORNING';   status = '☀️ Morning — fresh start'; }
-    else if (percent < 50) { phase = 'MIDDAY';    status = '⚡ Midday — keep moving'; }
-    else if (percent < 75) { phase = 'AFTERNOON'; status = '🔥 Afternoon — push it'; }
-    else if (percent < 90) { phase = 'EVENING';   status = '⏳ Evening — wrap up'; }
-    else                   { phase = 'BEDTIME';   status = '🌙 Bedtime soon'; }
+    if (percent < 25)      { phase = 'MORGEN';      status = '☀️ Morgen — frisch starten'; }
+    else if (percent < 50) { phase = 'MITTAG';      status = '⚡ Mittag — dranbleiben'; }
+    else if (percent < 75) { phase = 'NACHMITTAG';  status = '🔥 Nachmittag — weiterziehen'; }
+    else if (percent < 90) { phase = 'ABEND';       status = '⏳ Abend — langsam abschließen'; }
+    else                   { phase = 'SCHLAFENSZEIT'; status = '🌙 Bald Schlafenszeit'; }
     phaseEl.textContent  = phase;
     statusEl.textContent = status;
 
     const minsLeft = (SLEEP_HOUR - hours) * 60;
-    remainingEl.textContent = formatRemaining(minsLeft) + ' awake time left';
+    remainingEl.textContent = formatRemaining(minsLeft) + ' wache Zeit übrig';
   }
 
   // ---------- Row building ----------
@@ -1084,7 +1084,7 @@ body::after {
     const del = document.createElement('button');
     del.type = 'button';
     del.className = 'goal-delete';
-    del.setAttribute('aria-label', 'Delete goal');
+    del.setAttribute('aria-label', 'Ziel löschen');
     del.textContent = '×';
     del.addEventListener('click', () => {
       const list = getGoals(key);
@@ -1106,12 +1106,12 @@ body::after {
     document.getElementById('gmProgressNum').textContent   = done;
     document.getElementById('gmProgressTotal').textContent = '/ ' + total;
     const label = document.getElementById('gmProgressLabel');
-    if (total === 0)        label.textContent = 'no goals yet';
-    else if (done === total) label.textContent = 'all done — solid day';
-    else                     label.textContent = 'complete';
+    if (total === 0)        label.textContent = 'noch keine Ziele';
+    else if (done === total) label.textContent = 'alles erledigt — starker Tag';
+    else                     label.textContent = 'erledigt';
 
     document.getElementById('todayLabel').textContent =
-      'Today — ' + formatDate(getActiveDateString());
+      'Heute — ' + formatDate(getActiveDateString());
 
     const bar = document.getElementById('gmBar');
     bar.innerHTML = '';
@@ -1136,9 +1136,9 @@ body::after {
 
   function renderTomorrowCount() {
     const list = getGoals(tomorrowKey());
-    document.getElementById('gmTomorrowCount').textContent = list.length + ' planned';
+    document.getElementById('gmTomorrowCount').textContent = list.length + ' geplant';
     document.getElementById('tomorrowLabel').textContent =
-      'Plan tomorrow — ' + formatDate(getTomorrowDateString());
+      'Morgen planen — ' + formatDate(getTomorrowDateString());
   }
 
   function renderListInto(goals, listEl, emptyEl, key, readOnly) {
@@ -1155,7 +1155,7 @@ body::after {
       toggle.type = 'button';
       toggle.className = 'gm-show-toggle';
       const updateLabel = () => {
-        toggle.textContent = expanded ? 'Show less ▴' : ('Show ' + (goals.length - 5) + ' more ▾');
+        toggle.textContent = expanded ? 'Weniger zeigen ▴' : ((goals.length - 5) + ' weitere zeigen ▾');
       };
       updateLabel();
       toggle.addEventListener('click', () => {
@@ -1191,7 +1191,7 @@ body::after {
     const today    = getGoals(todayKey());
     const remaining = today.filter(g => !g.done);
     if (remaining.length === 0) return;
-    if (!confirm('Move ' + remaining.length + ' unchecked goal' + (remaining.length === 1 ? '' : 's') + ' to tomorrow?')) return;
+    if (!confirm(remaining.length + ' offenes Ziel' + (remaining.length === 1 ? '' : 'e') + ' auf morgen schieben?')) return;
     const tomorrow = getGoals(tomorrowKey());
     const seen = new Set(tomorrow.map(g => g.text));
     remaining.forEach(g => {
@@ -1225,8 +1225,8 @@ body::after {
         messages: [{
           role: 'user',
           content:
-            'Rewrite this single goal so it is concrete, action-oriented, and under 60 characters. ' +
-            'Return ONLY a JSON array with exactly one string, no preamble, no code fences.\n\nGoal: ' + text
+            'Formuliere dieses eine Ziel konkret, aktiv und unter 60 Zeichen. ' +
+            'Antworte NUR als JSON-Array mit genau einem String, ohne Erklärung, ohne Codeblock.\n\nZiel: ' + text
         }]
       })
     });
@@ -1258,7 +1258,7 @@ body::after {
       if (!text) return;
       if (!ANTHROPIC_API_KEY) {
         plainAdd(text);
-        showStatus(statusEl, 'Polish needs an Anthropic API key — added as-typed.', false);
+        showStatus(statusEl, 'Verbessern braucht einen Anthropic API-Key — unverändert hinzugefügt.', false);
         return;
       }
       polishBtn.disabled = true;
@@ -1267,7 +1267,7 @@ body::after {
         plainAdd(polished);
       } catch (e) {
         plainAdd(text);
-        showStatus(statusEl, 'Polish failed — added as-typed.', true);
+        showStatus(statusEl, 'Verbessern fehlgeschlagen — unverändert hinzugefügt.', true);
       } finally {
         polishBtn.disabled = false;
       }

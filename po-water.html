@@ -17,7 +17,7 @@ Contact: rowan.wisere@gmail.com
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0b">
-<title>Water Coach</title>
+<title>Wasser-Coach</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sync.js" defer></script>
 <script src="topbar.js" defer></script>
@@ -28,7 +28,7 @@ Contact: rowan.wisere@gmail.com
      ============================================================= -->
 <script>
 const CONFIG = {
-  appTitle: "Water Coach",
+  appTitle: "Wasser-Coach",
 
   // Default unit. Options: "bottle" | "glass" | "oz" | "ml"
   unit: "bottle",
@@ -467,16 +467,16 @@ html, body {
   </button>
 
   <div class="header">
-    <h1 class="title" id="appTitle">Water Coach</h1>
-    <button class="icon-btn" id="settingsBtn" title="Settings" aria-label="Settings">
+    <h1 class="title" id="appTitle">Wasser-Coach</h1>
+    <button class="icon-btn" id="settingsBtn" title="Einstellungen" aria-label="Einstellungen">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
   </div>
 
-  <div class="divider"><span>WATER</span></div>
+  <div class="divider"><span>WASSER</span></div>
 
   <div class="card">
-    <div class="water-label" id="waterUnitLabel">BOTTLES DRANK TODAY</div>
+    <div class="water-label" id="waterUnitLabel">FLASCHEN HEUTE</div>
     <div class="water-row">
       <span class="water-num" id="waterNum">0</span>
       <span class="water-target" id="waterTarget">/ 9</span>
@@ -490,29 +490,29 @@ html, body {
       </div>
       <div class="water-bar-labels">
         <span id="waterBarMin">0</span>
-        <span class="water-zone-name">healthy zone</span>
+        <span class="water-zone-name">gesunder Bereich</span>
         <span id="waterBarMax">12+</span>
       </div>
     </div>
 
     <div class="water-actions">
-      <button class="water-minus-btn" id="waterMinusBtn" type="button" aria-label="Undo last">−</button>
+      <button class="water-minus-btn" id="waterMinusBtn" type="button" aria-label="Letztes rückgängig machen">−</button>
       <button class="water-plus-btn" id="waterPlusBtn" type="button">
-        <span id="waterPlusLabel">Drank a bottle</span>
+        <span id="waterPlusLabel">Eine Flasche getrunken</span>
         <span>↑</span>
       </button>
     </div>
-    <div class="water-helper" id="waterHelper">Start the day — first one in.</div>
+    <div class="water-helper" id="waterHelper">Starte den Tag — die erste zählt.</div>
 
     <button class="why-toggle" id="whyToggle" type="button" aria-expanded="false">
-      <span>Why this target?</span>
+      <span>Warum dieses Ziel?</span>
       <span class="why-arrow">▾</span>
     </button>
     <div class="why-body" id="whyBody"></div>
   </div>
 
   <div class="card">
-    <div class="water-label">LAST 14 DAYS</div>
+    <div class="water-label">LETZTE 14 TAGE</div>
     <div class="spark-wrap">
       <svg class="spark-svg" id="sparkSvg" viewBox="0 0 280 70" preserveAspectRatio="none"></svg>
     </div>
@@ -523,17 +523,17 @@ html, body {
 <!-- Settings modal -->
 <div class="modal-bg" id="setModalBg">
   <div class="modal">
-    <h3>Settings</h3>
+    <h3>Einstellungen</h3>
 
     <div class="set-section">
-      <h4>Profile</h4>
+      <h4>Profil</h4>
       <div class="field-row">
         <div class="field">
-          <label>Weight</label>
+          <label>Gewicht</label>
           <input type="number" id="setWeight" step="0.5" min="20" max="300">
         </div>
         <div class="field">
-          <label>Weight unit</label>
+          <label>Gewichtseinheit</label>
           <div class="seg" id="setWeightUnit">
             <button data-u="kg">kg</button>
             <button data-u="lb">lb</button>
@@ -542,87 +542,87 @@ html, body {
       </div>
       <div class="field-row">
         <div class="field">
-          <label>Age</label>
+          <label>Alter</label>
           <input type="number" id="setAge" min="13" max="100">
         </div>
         <div class="field">
-          <label>Sex</label>
+          <label>Geschlecht</label>
           <div class="seg" id="setSex">
-            <button data-s="m">Male</button>
-            <button data-s="f">Female</button>
-            <button data-s="o">Other</button>
+            <button data-s="m">Männlich</button>
+            <button data-s="f">Weiblich</button>
+            <button data-s="o">Andere</button>
           </div>
         </div>
       </div>
       <div class="field">
-        <label>Activity (training hours per week)</label>
+        <label>Aktivität (Trainingsstunden pro Woche)</label>
         <input type="number" id="setActivity" min="0" max="40" step="0.5">
       </div>
     </div>
 
     <div class="set-section">
-      <h4>Display</h4>
+      <h4>Anzeige</h4>
       <div class="field">
-        <label>Show water as</label>
+        <label>Wasser anzeigen als</label>
         <div class="seg" id="setUnit">
-          <button data-u="bottle">Bottles</button>
-          <button data-u="glass">Glasses</button>
+          <button data-u="bottle">Flaschen</button>
+          <button data-u="glass">Gläser</button>
           <button data-u="oz">oz</button>
           <button data-u="ml">ml</button>
         </div>
       </div>
       <div class="field-row">
         <div class="field">
-          <label>Bottle size (ml)</label>
+          <label>Flaschengröße (ml)</label>
           <input type="number" id="setBottleMl" min="100" max="2000" step="50">
         </div>
         <div class="field">
-          <label>Glass size (ml)</label>
+          <label>Glasgröße (ml)</label>
           <input type="number" id="setGlassMl" min="100" max="500" step="10">
         </div>
       </div>
     </div>
 
     <div class="set-section">
-      <h4>Caffeine</h4>
+      <h4>Koffein</h4>
       <div class="field">
-        <label>Average caffeine per day (mg)</label>
+        <label>Durchschnittliches Koffein pro Tag (mg)</label>
         <input type="number" id="setCaffeine" min="0" max="1000" step="10">
         <div style="font-size:11px;color:var(--text-3);margin-top:4px;line-height:1.4">
-          ~1 cup of coffee = 95mg · espresso shot = 75mg · energy drink = 160mg.
-          Above 200mg/day starts to add a small water requirement.
+          ~1 Tasse Kaffee = 95 mg · Espresso = 75 mg · Energy Drink = 160 mg.
+          Ab 200 mg pro Tag wird ein kleiner zusätzlicher Wasserbedarf berechnet.
         </div>
       </div>
     </div>
 
     <div class="set-section">
-      <h4>Stimulants & meds</h4>
+      <h4>Stimulanzien & Medikamente</h4>
       <div class="field">
-        <label>Search to add</label>
+        <label>Suchen und hinzufügen</label>
         <div class="search-wrap">
-          <input type="text" class="search-input" id="subSearch" placeholder="Type a name (Adderall, Concerta, Lithium…)" autocomplete="off">
+          <input type="text" class="search-input" id="subSearch" placeholder="Namen eingeben (Adderall, Concerta, Lithium…)" autocomplete="off">
           <div class="search-results" id="subResults"></div>
         </div>
         <div style="font-size:11px;color:var(--text-3);margin-top:4px;line-height:1.4">
-          Each substance bumps your daily water target. Includes ADHD stims,
-          diuretics, decongestants, nicotine, alcohol, and a few others.
+          Jede Substanz erhöht dein Wasserziel etwas. Enthält z. B. ADHD-Stimulanzien,
+          Entwässerungsmittel, abschwellende Mittel, Nikotin, Alkohol und einige weitere.
         </div>
       </div>
       <div class="subs-list" id="subsList"></div>
     </div>
 
     <div class="set-section">
-      <h4>Data</h4>
+      <h4>Daten</h4>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn-secondary" id="setExport">Export JSON</button>
-        <button class="btn-secondary" id="setImport">Import JSON</button>
-        <button class="btn-secondary" id="setReset" style="color:var(--bad);border-color:rgba(255,138,138,0.3)">Reset all</button>
+        <button class="btn-secondary" id="setExport">JSON exportieren</button>
+        <button class="btn-secondary" id="setImport">JSON importieren</button>
+        <button class="btn-secondary" id="setReset" style="color:var(--bad);border-color:rgba(255,138,138,0.3)">Alles zurücksetzen</button>
       </div>
       <input type="file" id="setImportFile" accept=".json" style="display:none">
     </div>
 
     <div class="modal-actions">
-      <button class="btn-primary" id="setClose">Done</button>
+      <button class="btn-primary" id="setClose">Fertig</button>
     </div>
   </div>
 </div>
@@ -709,7 +709,7 @@ html, body {
     try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
   }
   let state = loadState();
-  $('appTitle').textContent = CONFIG.appTitle || 'Water Coach';
+  $('appTitle').textContent = CONFIG.appTitle || 'Wasser-Coach';
 
   // Helpers
   function dateKey(d) {
@@ -756,14 +756,14 @@ html, body {
     return 1;                                   // ml
   }
   function unitLabelPlural() {
-    if (state.unit === 'bottle') return 'bottles';
-    if (state.unit === 'glass')  return 'glasses';
+    if (state.unit === 'bottle') return 'Flaschen';
+    if (state.unit === 'glass')  return 'Gläser';
     if (state.unit === 'oz')     return 'oz';
     return 'ml';
   }
   function unitLabelSingular() {
-    if (state.unit === 'bottle') return 'bottle';
-    if (state.unit === 'glass')  return 'glass';
+    if (state.unit === 'bottle') return 'Flasche';
+    if (state.unit === 'glass')  return 'Glas';
     if (state.unit === 'oz')     return 'oz';
     return 'ml';
   }
@@ -777,8 +777,8 @@ html, body {
   // ============================================================
   function renderDayPill() {
     const d = new Date();
-    const dows = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-    const mons = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const dows = ['SO','MO','DI','MI','DO','FR','SA'];
+    const mons = ['JAN','FEB','MÄR','APR','MAI','JUN','JUL','AUG','SEP','OKT','NOV','DEZ'];
     $('dayPillLabel').textContent = dows[d.getDay()] + ', ' + mons[d.getMonth()] + ' ' + d.getDate();
   }
 
@@ -788,10 +788,10 @@ html, body {
     const count = todayCount();
     const unitName = unitLabelPlural();
 
-    $('waterUnitLabel').textContent = unitName.toUpperCase() + ' DRANK TODAY';
+    $('waterUnitLabel').textContent = unitName.toUpperCase() + ' HEUTE';
     $('waterNum').textContent = count;
     $('waterTarget').textContent = '/ ' + targetUnits;
-    $('waterPlusLabel').textContent = 'Drank a ' + unitLabelSingular();
+    $('waterPlusLabel').textContent = unitLabelSingular() + ' getrunken';
 
     // Progress bar with three zones: low (0-65%), healthy (65-100%), over (100-150%)
     const pctRaw = (count / targetUnits) * 100;
@@ -807,11 +807,11 @@ html, body {
 
     // Helper text
     const helper = $('waterHelper');
-    if (count === 0) { helper.textContent = 'Start the day — first one in.'; helper.classList.remove('good'); }
-    else if (pctRaw < 50) { helper.textContent = 'Behind pace — drink one in the next hour.'; helper.classList.remove('good'); }
-    else if (pctRaw < 100) { helper.textContent = (targetUnits - count) + ' to go. Pacing well.'; helper.classList.remove('good'); }
-    else if (pctRaw < 130) { helper.textContent = '✓ Target hit — top up if you train this evening.'; helper.classList.add('good'); }
-    else { helper.textContent = 'Strong — way past target.'; helper.classList.add('good'); }
+    if (count === 0) { helper.textContent = 'Starte den Tag — die erste zählt.'; helper.classList.remove('good'); }
+    else if (pctRaw < 50) { helper.textContent = 'Etwas hinterher — trink in der nächsten Stunde eins.'; helper.classList.remove('good'); }
+    else if (pctRaw < 100) { helper.textContent = (targetUnits - count) + ' noch offen. Gutes Tempo.'; helper.classList.remove('good'); }
+    else if (pctRaw < 130) { helper.textContent = '✓ Ziel erreicht — bei Training gerne nachlegen.'; helper.classList.add('good'); }
+    else { helper.textContent = 'Stark — deutlich über Ziel.'; helper.classList.add('good'); }
 
     // Disable minus when at zero
     $('waterMinusBtn').disabled = count <= 0;
@@ -826,17 +826,17 @@ html, body {
     const u = state.weightUnit;
     const wDisp = u === 'lb' ? (state.profile.weightKg).toFixed(0) : state.profile.weightKg.toFixed(0);
     let html = '';
-    html += '<div class="why-row"><span class="why-label">Base (' + wDisp + ' ' + u + ' × 35 ml)</span><span class="why-val">' + fmtMl(calc.base) + '</span></div>';
+    html += '<div class="why-row"><span class="why-label">Basis (' + wDisp + ' ' + u + ' × 35 ml)</span><span class="why-val">' + fmtMl(calc.base) + '</span></div>';
     if (calc.exercise > 0)
-      html += '<div class="why-row"><span class="why-label">+ Exercise (' + state.profile.activityHrsPerWeek + ' h/wk)</span><span class="why-val">+ ' + fmtMl(calc.exercise) + '</span></div>';
+      html += '<div class="why-row"><span class="why-label">+ Training (' + state.profile.activityHrsPerWeek + ' h/Woche)</span><span class="why-val">+ ' + fmtMl(calc.exercise) + '</span></div>';
     if (calc.caffeine > 0)
-      html += '<div class="why-row"><span class="why-label">+ Caffeine (' + state.caffeineMgPerDay + ' mg/day)</span><span class="why-val">+ ' + fmtMl(calc.caffeine) + '</span></div>';
+      html += '<div class="why-row"><span class="why-label">+ Koffein (' + state.caffeineMgPerDay + ' mg/Tag)</span><span class="why-val">+ ' + fmtMl(calc.caffeine) + '</span></div>';
     (state.substances || []).forEach(s => {
       html += '<div class="why-row"><span class="why-label">+ ' + escape(s.name) + ' (' + escape(subDoseLabel(s)) + ')</span><span class="why-val">+ ' + fmtMl(subExtraMl(s)) + '</span></div>';
     });
     if (calc.adjust > 0)
-      html += '<div class="why-row"><span class="why-label">+ Sex / age adjustment</span><span class="why-val">+ ' + fmtMl(calc.adjust) + '</span></div>';
-    html += '<div class="why-row total"><span class="why-label">Daily target</span><span class="why-val">' + fmtMl(calc.total) + ' ≈ ' + targetUnits + ' ' + unitLabelPlural() + '</span></div>';
+      html += '<div class="why-row"><span class="why-label">+ Anpassung nach Geschlecht / Alter</span><span class="why-val">+ ' + fmtMl(calc.adjust) + '</span></div>';
+    html += '<div class="why-row total"><span class="why-label">Tagesziel</span><span class="why-val">' + fmtMl(calc.total) + ' ≈ ' + targetUnits + ' ' + unitLabelPlural() + '</span></div>';
     wrap.innerHTML = html;
   }
 
@@ -862,7 +862,7 @@ html, body {
         + '<div class="hist-bar-wrap"><div class="hist-bar-fill ' + cls + '" style="width:' + pct + '%"></div></div>'
         + '<span class="hist-count">' + count + '/' + target + '</span>'
         + '</div>';
-    }).join('') || '<div style="text-align:center;font-size:12px;color:var(--text-3);padding:12px 0">No logs yet.</div>';
+    }).join('') || '<div style="text-align:center;font-size:12px;color:var(--text-3);padding:12px 0">Noch keine Einträge.</div>';
   }
 
   function renderSparkline(target) {
@@ -970,20 +970,20 @@ html, body {
   function renderSubsList() {
     const list = $('subsList');
     if (!state.substances || !state.substances.length) {
-      list.innerHTML = '<div style="font-size:12px;color:var(--text-3);text-align:center;padding:14px 0;font-style:italic;">No substances added.</div>';
+      list.innerHTML = '<div style="font-size:12px;color:var(--text-3);text-align:center;padding:14px 0;font-style:italic;">Noch keine Substanzen hinzugefügt.</div>';
       return;
     }
     list.innerHTML = state.substances.map((s, i) =>
       '<div class="sub-row" data-i="' + i + '">'
       + '<div class="sub-row-info">'
       +   '<div class="sub-row-name">' + escape(s.name) + '</div>'
-      +   '<div class="sub-row-meta">+ ' + fmtMl(subExtraMl(s)) + ' / day · ' + escape(s.cat || '') + '</div>'
+      +   '<div class="sub-row-meta">+ ' + fmtMl(subExtraMl(s)) + ' / Tag · ' + escape(s.cat || '') + '</div>'
       + '</div>'
       + '<div class="sub-row-dose">'
       +   '<input type="number" class="sub-dose-input" data-i="' + i + '" min="0" step="0.5" value="' + (s.dose != null ? s.dose : s.defaultDose) + '">'
       +   '<span class="sub-dose-unit">' + escape(s.unit || '') + '</span>'
       + '</div>'
-      + '<button class="sub-row-del" data-i="' + i + '" aria-label="Remove">×</button>'
+      + '<button class="sub-row-del" data-i="' + i + '" aria-label="Entfernen">×</button>'
       + '</div>'
     ).join('');
     list.querySelectorAll('.sub-dose-input').forEach(inp => {
@@ -994,7 +994,7 @@ html, body {
         // Re-render the meta line for this row + the why card
         const row = inp.closest('.sub-row');
         const meta = row.querySelector('.sub-row-meta');
-        meta.textContent = '+ ' + fmtMl(subExtraMl(state.substances[i])) + ' / day · ' + (state.substances[i].cat || '');
+        meta.textContent = '+ ' + fmtMl(subExtraMl(state.substances[i])) + ' / Tag · ' + (state.substances[i].cat || '');
         renderWater();
       });
     });
@@ -1015,7 +1015,7 @@ html, body {
       s.name.toLowerCase().includes(q) || s.cat.toLowerCase().includes(q)
     ).slice(0, 8);
     if (!matches.length) {
-      results.innerHTML = '<div class="search-result"><span class="search-result-name">No matches</span><span class="search-result-meta">Try a different name or category</span></div>';
+      results.innerHTML = '<div class="search-result"><span class="search-result-name">Keine Treffer</span><span class="search-result-meta">Versuch einen anderen Namen oder eine Kategorie</span></div>';
       results.classList.add('show');
       return;
     }
@@ -1023,7 +1023,7 @@ html, body {
       const defaultExtra = (s.defaultDose || 0) * (s.mlPerUnit || 0);
       return '<div class="search-result" data-id="' + s.id + '">'
         + '<span class="search-result-name">' + escape(s.name) + ' <span class="search-result-add">+</span></span>'
-        + '<span class="search-result-meta">' + escape(s.cat) + ' · ' + s.defaultDose + ' ' + escape(s.unit) + ' default → adds ~' + fmtMl(defaultExtra) + '/day · ' + escape(s.note) + '</span>'
+        + '<span class="search-result-meta">' + escape(s.cat) + ' · Standard: ' + s.defaultDose + ' ' + escape(s.unit) + ' → ca. +' + fmtMl(defaultExtra) + '/Tag · ' + escape(s.note) + '</span>'
         + '</div>';
     }).join('');
     results.classList.add('show');
@@ -1032,7 +1032,7 @@ html, body {
         const id = el.dataset.id;
         const sub = SUBSTANCE_DB.find(x => x.id === id);
         if (!sub) return;
-        if ((state.substances || []).find(x => x.id === id)) { alert('Already added — edit the dose below.'); return; }
+        if ((state.substances || []).find(x => x.id === id)) { alert('Schon hinzugefügt — ändere unten einfach die Dosis.'); return; }
         state.substances.push({
           id: sub.id, name: sub.name, cat: sub.cat,
           unit: sub.unit, mlPerUnit: sub.mlPerUnit,
@@ -1071,15 +1071,15 @@ html, body {
     r.onload = () => {
       try {
         const parsed = JSON.parse(r.result);
-        if (!confirm('Replace ALL current data with the imported file?')) return;
+        if (!confirm('Alle aktuellen Daten durch die importierte Datei ersetzen?')) return;
         state = normalize(parsed);
         saveState(); renderSettings(); renderAll();
-      } catch (err) { alert('Import failed: ' + err.message); }
+      } catch (err) { alert('Import fehlgeschlagen: ' + err.message); }
     };
     r.readAsText(f);
   });
   $('setReset').addEventListener('click', () => {
-    if (!confirm('Wipe ALL water logs and settings? This cannot be undone.')) return;
+    if (!confirm('Alle Wasser-Einträge und Einstellungen löschen? Das kann nicht rückgängig gemacht werden.')) return;
     localStorage.removeItem(LS_KEY);
     state = loadState();
     $('setModalBg').classList.remove('show');

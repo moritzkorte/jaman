@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0b">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Finances</title>
+<title>Finanzen</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="sync.js" defer></script>
 <script src="topbar.js" defer></script>
@@ -1574,14 +1574,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 <div class="shell">
 
 <!-- ===== BACK BUTTON ===== -->
-<a href="index.html" class="fin-back-btn" aria-label="Back to dashboard">
+<a href="index.html" class="fin-back-btn" aria-label="Zurück zum Dashboard">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-  <span>Back</span>
+  <span>Zurück</span>
 </a>
 
 <!-- ===== FINANCE TICKER (rotating subscription renewals) ===== -->
 <div class="finance-ticker hidden" id="financeTicker">
-  <span class="ticker-tag" id="tickerTag">RENEWS</span>
+  <span class="ticker-tag" id="tickerTag">VERLÄNGERT SICH</span>
   <div class="ticker-stream" id="tickerStream"></div>
   <div class="ticker-dots" id="tickerDots"></div>
 </div>
@@ -1589,12 +1589,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 <!-- ===== NET WORTH ===== -->
 <div class="section" data-section="net">
   <div class="section-title">
-    <span class="section-title-text">NET WORTH</span>
+    <span class="section-title-text">VERMÖGEN</span>
   </div>
   <div class="card" style="background:transparent;border:none !important;box-shadow:none;padding:0;overflow:visible">
     <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:14px">
       <div>
-        <div style="font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Total net worth</div>
+        <div style="font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Gesamtvermögen</div>
         <div id="netWorthTotal" style="font-size:34px;font-weight:700;color:var(--text-primary);line-height:1.05;margin-top:2px">CHF 0</div>
         <div id="netWorthBreakdown" style="font-size:11px;color:var(--text-tertiary);margin-top:4px"></div>
       </div>
@@ -1613,7 +1613,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     <div class="nw-overview-grid">
       <div class="nw-chart-wrap" id="nwChartWrap">
         <div class="nw-chart-head">
-          <span class="nw-chart-label">All-time</span>
+          <span class="nw-chart-label">Gesamtverlauf</span>
           <span class="nw-chart-delta" id="nwChartDelta">—</span>
         </div>
         <svg class="nw-chart-svg" id="nwChartSvg" viewBox="0 0 600 200" preserveAspectRatio="none" aria-hidden="true">
@@ -1641,34 +1641,34 @@ input[type="date"]::-webkit-calendar-picker-indicator {
             <div class="nw-stat-val" id="nwStat1pct">—</div>
           </div>
           <div class="nw-stat">
-            <div class="nw-stat-label">All-time high</div>
+            <div class="nw-stat-label">Höchststand</div>
             <div class="nw-stat-val" id="nwStatHigh">—</div>
           </div>
           <div class="nw-stat">
-            <div class="nw-stat-label">All-time low</div>
+            <div class="nw-stat-label">Tiefststand</div>
             <div class="nw-stat-val" id="nwStatLow">—</div>
           </div>
           <div class="nw-stat">
-            <div class="nw-stat-label">Snapshots</div>
+            <div class="nw-stat-label">Einträge</div>
             <div class="nw-stat-val" id="nwStatCount">—</div>
           </div>
         </div>
-        <div class="nw-chart-empty" id="nwChartEmpty">Add or edit an asset to start tracking your net worth over time.</div>
+        <div class="nw-chart-empty" id="nwChartEmpty">Füge ein Asset hinzu oder bearbeite eins, um dein Vermögen über Zeit zu tracken.</div>
       </div>
 
       <div class="nw-donut-wrap">
         <div class="nw-chart-head">
-          <span class="nw-chart-label">Allocation</span>
+          <span class="nw-chart-label">Aufteilung</span>
           <span class="nw-chart-delta" id="nwDonutCount">—</span>
         </div>
         <div class="nw-donut-stage">
           <svg class="nw-donut-svg" id="nwDonutSvg" viewBox="0 0 140 140" aria-hidden="true"></svg>
           <div class="nw-donut-center">
             <div class="nw-donut-num" id="nwDonutTotal">—</div>
-            <div class="nw-donut-sub">total</div>
+            <div class="nw-donut-sub">gesamt</div>
           </div>
         </div>
-        <div class="nw-donut-empty" id="nwDonutEmpty">Add an account to see your breakdown</div>
+        <div class="nw-donut-empty" id="nwDonutEmpty">Füge ein Konto hinzu, um die Aufteilung zu sehen</div>
         <div class="nw-donut-legend" id="nwDonutLegend"></div>
       </div>
     </div>
@@ -1676,31 +1676,31 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     <!-- Activity log — every add / edit, newest first -->
     <div class="nw-activity" id="nwActivity">
       <div class="nw-activity-h">
-        <span class="nw-chart-label">Recent activity</span>
+        <span class="nw-chart-label">Letzte Aktivität</span>
         <span class="nw-chart-delta" id="nwActivityCount">—</span>
       </div>
       <div class="nw-activity-list" id="nwActivityList"></div>
-      <div class="nw-activity-empty" id="nwActivityEmpty">No activity yet — add your first account.</div>
+      <div class="nw-activity-empty" id="nwActivityEmpty">Noch keine Aktivität — füge dein erstes Konto hinzu.</div>
     </div>
 
     <div class="card-grid" style="gap:10px">
       <!-- Bank accounts -->
       <div class="card nw-subcard">
-        <div class="label" style="display:flex;justify-content:space-between;align-items:center"><span>🏦 Bank accounts</span><span id="bankTotal" style="font-size:13px;color:var(--text-primary);font-weight:600">0</span></div>
+        <div class="label" style="display:flex;justify-content:space-between;align-items:center"><span>🏦 Bankkonten</span><span id="bankTotal" style="font-size:13px;color:var(--text-primary);font-weight:600">0</span></div>
         <div id="bankList" class="nw-list"></div>
         <div class="quick-add">
-          <input type="text" placeholder="Account name" id="bankName" />
-          <input type="number" placeholder="Amount" id="bankAmount" step="0.01" />
+          <input type="text" placeholder="Kontoname" id="bankName" />
+          <input type="number" placeholder="Betrag" id="bankAmount" step="0.01" />
           <button class="quick-add-btn" id="bankAddBtn">+</button>
         </div>
       </div>
       <!-- Stocks / Investments -->
       <div class="card nw-subcard">
-        <div class="label" style="display:flex;justify-content:space-between;align-items:center"><span>📈 Stocks / Investments</span><span id="stocksTotal" style="font-size:13px;color:var(--text-primary);font-weight:600">0</span></div>
+        <div class="label" style="display:flex;justify-content:space-between;align-items:center"><span>📈 Aktien / Investments</span><span id="stocksTotal" style="font-size:13px;color:var(--text-primary);font-weight:600">0</span></div>
         <div id="stocksList" class="nw-list"></div>
         <div class="quick-add">
-          <input type="text" placeholder="Stock / fund" id="stocksName" />
-          <input type="number" placeholder="Value" id="stocksAmount" step="0.01" />
+          <input type="text" placeholder="Aktie / Fonds" id="stocksName" />
+          <input type="number" placeholder="Wert" id="stocksAmount" step="0.01" />
           <button class="quick-add-btn" id="stocksAddBtn">+</button>
         </div>
       </div>
@@ -1709,18 +1709,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         <div class="label" style="display:flex;justify-content:space-between;align-items:center"><span>🪙 Crypto</span><span id="cryptoTotal" style="font-size:13px;color:var(--text-primary);font-weight:600">0</span></div>
         <div id="cryptoList" class="nw-list"></div>
         <div class="quick-add">
-          <input type="text" placeholder="Coin / wallet" id="cryptoName" />
-          <input type="number" placeholder="Value" id="cryptoAmount" step="0.01" />
+          <input type="text" placeholder="Coin / Wallet" id="cryptoName" />
+          <input type="number" placeholder="Wert" id="cryptoAmount" step="0.01" />
           <button class="quick-add-btn" id="cryptoAddBtn">+</button>
         </div>
       </div>
       <!-- Other assets -->
       <div class="card nw-subcard">
-        <div class="label" style="display:flex;justify-content:space-between;align-items:center"><span>💼 Other assets</span><span id="otherTotal" style="font-size:13px;color:var(--text-primary);font-weight:600">0</span></div>
+        <div class="label" style="display:flex;justify-content:space-between;align-items:center"><span>💼 Andere Assets</span><span id="otherTotal" style="font-size:13px;color:var(--text-primary);font-weight:600">0</span></div>
         <div id="otherList" class="nw-list"></div>
         <div class="quick-add">
-          <input type="text" placeholder="Asset name" id="otherName" />
-          <input type="number" placeholder="Value" id="otherAmount" step="0.01" />
+          <input type="text" placeholder="Asset-Name" id="otherName" />
+          <input type="number" placeholder="Wert" id="otherAmount" step="0.01" />
           <button class="quick-add-btn" id="otherAddBtn">+</button>
         </div>
       </div>
@@ -1731,22 +1731,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 <!-- ===== ACTIVE SUBSCRIPTIONS ===== -->
 <div class="section" data-section="subs">
   <div class="section-title">
-    <span class="section-title-text">ACTIVE SUBSCRIPTIONS</span>
+    <span class="section-title-text">AKTIVE ABOS</span>
   </div>
   <div class="card" style="background:linear-gradient(135deg, rgba(83,74,183,0.07), rgba(216,90,48,0.05));border:1px solid rgba(83,74,183,0.20)">
     <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:12px">
       <div>
-        <div style="font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Monthly burn</div>
+        <div style="font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Monatliche Kosten</div>
         <div id="subsTotal" style="font-size:28px;font-weight:700;color:var(--text-primary);line-height:1.1;margin-top:2px">CHF 0 <span style="font-size:13px;color:var(--text-tertiary);font-weight:500">/ mo</span></div>
         <div id="subsYearly" style="font-size:11px;color:var(--text-tertiary);margin-top:2px"></div>
       </div>
       <div id="subsCount" style="font-size:11px;color:var(--text-tertiary)"></div>
     </div>
     <div id="subsList"></div>
-    <div class="empty-state" id="subsEmpty">No subscriptions yet</div>
+    <div class="empty-state" id="subsEmpty">Noch keine Abos</div>
     <div class="quick-add" style="flex-wrap:wrap;gap:6px">
-      <input type="text" placeholder="Service (e.g. Netflix)" id="subName" style="flex:1.5;min-width:120px" />
-      <input type="number" placeholder="Amount" id="subAmount" step="0.01" style="flex:1;max-width:100px" />
+      <input type="text" placeholder="Dienst (z. B. Netflix)" id="subName" style="flex:1.5;min-width:120px" />
+      <input type="number" placeholder="Betrag" id="subAmount" step="0.01" style="flex:1;max-width:100px" />
       <select id="subCurrency" style="padding:6px 10px;border:0.5px solid var(--border);border-radius:var(--radius-md);font-size:12px;font-family:inherit;background:var(--bg-card);color:var(--text-primary);max-width:90px">
         <option value="CHF">CHF</option>
         <option value="USD">USD</option>
@@ -1754,20 +1754,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         <option value="GBP">GBP</option>
       </select>
       <select id="subPeriod" style="padding:6px 10px;border:0.5px solid var(--border);border-radius:var(--radius-md);font-size:12px;font-family:inherit;background:var(--bg-card);color:var(--text-primary);max-width:100px">
-        <option value="monthly">Monthly</option>
-        <option value="yearly">Yearly</option>
-        <option value="weekly">Weekly</option>
+        <option value="monthly">Monatlich</option>
+        <option value="yearly">Jährlich</option>
+        <option value="weekly">Wöchentlich</option>
       </select>
-      <label class="date-field" title="Next renewal date" style="min-width:150px"><span class="date-emoji" aria-hidden="true">📅</span><input type="date" id="subRenewal" /></label>
-      <select id="subFromCat" title="Which net worth account to deduct from" style="padding:6px 10px;border:0.5px solid var(--border);border-radius:var(--radius-md);font-size:12px;font-family:inherit;background:var(--bg-card);color:var(--text-primary);min-width:130px">
-        <option value="">No accounts yet</option>
+      <label class="date-field" title="Nächste Verlängerung" style="min-width:150px"><span class="date-emoji" aria-hidden="true">📅</span><input type="date" id="subRenewal" /></label>
+      <select id="subFromCat" title="Von welchem Vermögenskonto abbuchen" style="padding:6px 10px;border:0.5px solid var(--border);border-radius:var(--radius-md);font-size:12px;font-family:inherit;background:var(--bg-card);color:var(--text-primary);min-width:130px">
+        <option value="">Noch keine Konten</option>
       </select>
-      <label class="sub-auto-toggle" title="Auto-deduct from the linked account on each renewal">
+      <label class="sub-auto-toggle" title="Bei jeder Verlängerung automatisch vom verknüpften Konto abziehen">
         <input type="checkbox" id="subAutoDeduct" />
         <span class="sub-auto-track"><span class="sub-auto-thumb"></span></span>
-        <span class="sub-auto-label">Auto-deduct</span>
+        <span class="sub-auto-label">Auto-Abzug</span>
       </label>
-      <button class="quick-add-btn" id="subAddBtn" onclick="window.__addSub && window.__addSub()">+ Add</button>
+      <button class="quick-add-btn" id="subAddBtn" onclick="window.__addSub && window.__addSub()">+ Hinzufügen</button>
     </div>
   </div>
 </div>
@@ -1775,114 +1775,114 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 <!-- ===== INCOMING ORDERS ===== -->
 <div class="section" data-section="incoming">
   <div class="section-title">
-    <span class="section-title-text">INCOMING ORDERS</span>
+    <span class="section-title-text">BESTELLUNGEN</span>
   </div>
 
   <!-- Add card with cost + currency + from-category + arrival date -->
   <div class="card ord-add-card">
-    <div class="ord-add-eyebrow">+ NEW ORDER</div>
+    <div class="ord-add-eyebrow">+ NEUE BESTELLUNG</div>
     <div class="ord-add-grid">
-      <input type="text"   id="ordName"   placeholder="Item (e.g. New iPhone)" class="ord-input ord-input-name">
-      <input type="number" id="ordCost"   placeholder="Cost" step="0.01" class="ord-input ord-input-cost">
+      <input type="text"   id="ordName"   placeholder="Artikel (z. B. neues iPhone)" class="ord-input ord-input-name">
+      <input type="number" id="ordCost"   placeholder="Kosten" step="0.01" class="ord-input ord-input-cost">
       <select id="ordCurrency" class="ord-input ord-input-ccy">
         <option value="CHF">CHF</option>
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
         <option value="GBP">GBP</option>
       </select>
-      <select id="ordFromCat" class="ord-input ord-input-from" title="Which net worth account this comes out of">
-        <option value="">No accounts yet</option>
+      <select id="ordFromCat" class="ord-input ord-input-from" title="Von welchem Vermögenskonto das bezahlt wird">
+        <option value="">Noch keine Konten</option>
       </select>
-      <label class="date-field ord-input-date" title="Expected arrival"><span class="date-emoji" aria-hidden="true">📅</span><input type="date" id="ordArrival" /></label>
-      <button class="ord-add-btn" id="ordAddBtn" onclick="window.__addOrder && window.__addOrder()">+ Add Order</button>
+      <label class="date-field ord-input-date" title="Erwartete Lieferung"><span class="date-emoji" aria-hidden="true">📅</span><input type="date" id="ordArrival" /></label>
+      <button class="ord-add-btn" id="ordAddBtn" onclick="window.__addOrder && window.__addOrder()">+ Bestellung hinzufügen</button>
     </div>
-    <div class="ord-add-preview" id="ordAddPreview">Type a cost — preview will show what % of net worth it takes.</div>
+    <div class="ord-add-preview" id="ordAddPreview">Gib Kosten ein — dann siehst du, wie viel % deines Vermögens es kostet.</div>
   </div>
 
   <!-- Items list -->
   <div class="ord-section-h">
-    <span class="ord-section-label">ITEMS ON THE WAY</span>
-    <span class="ord-section-count" id="ordCount">0 items</span>
+    <span class="ord-section-label">UNTERWEGS</span>
+    <span class="ord-section-count" id="ordCount">0 Artikel</span>
   </div>
   <div id="ordList"></div>
   <div class="ord-empty-card" id="ordEmpty">
     <div class="ord-empty-icon">📦</div>
-    <div class="ord-empty-title">Nothing on the way</div>
-    <div class="ord-empty-sub">Log an order above. Pick the account it comes out of, the expected arrival date, and the dashboard will show what % of your net worth it costs.</div>
+    <div class="ord-empty-title">Nichts unterwegs</div>
+    <div class="ord-empty-sub">Trage oben eine Bestellung ein. Wähle das Konto und das Lieferdatum, dann zeigt dir das Dashboard, wie viel % deines Vermögens sie kostet.</div>
   </div>
 </div>
 
 <!-- ===== WISHLIST ===== -->
 <div class="section" data-section="wish">
   <div class="section-title">
-    <span class="section-title-text">WISHLIST</span>
+    <span class="section-title-text">WUNSCHLISTE</span>
   </div>
   <!-- Hero card with stats -->
   <div class="card wish-hero">
     <div class="wish-hero-top">
       <div>
-        <div class="wish-hero-eyebrow">WISHLIST TOTAL</div>
+        <div class="wish-hero-eyebrow">WUNSCHLISTE GESAMT</div>
         <div class="wish-hero-num" id="wishTotal">CHF 0</div>
       </div>
       <div class="wish-hero-pct-wrap">
-        <div class="wish-hero-pct-label">% OF NET WORTH</div>
+        <div class="wish-hero-pct-label">% DES VERMÖGENS</div>
         <div class="wish-hero-pct-num" id="wishPctOfNwHero">—</div>
       </div>
     </div>
     <div class="wish-hero-bar">
       <div class="wish-hero-bar-fill" id="wishHeroFill" style="width:0%"></div>
     </div>
-    <div class="wish-hero-foot" id="wishPctOfNw">Add net worth first to see this as a %</div>
+    <div class="wish-hero-foot" id="wishPctOfNw">Füge zuerst Vermögen hinzu, um den Prozentwert zu sehen</div>
   </div>
 
   <!-- Add row -->
   <div class="card wish-add-card">
-    <div class="wish-add-eyebrow">+ ADD AN ITEM</div>
+    <div class="wish-add-eyebrow">+ WUNSCH HINZUFÜGEN</div>
     <div class="wish-add-row">
-      <input type="text"   id="wishName"   placeholder="Item name (e.g. New iPhone Pro Max)" class="wish-input wish-input-name">
-      <input type="number" id="wishAmount" placeholder="Cost" step="0.01" class="wish-input wish-input-amt">
+      <input type="text"   id="wishName"   placeholder="Name (z. B. neues iPhone Pro Max)" class="wish-input wish-input-name">
+      <input type="number" id="wishAmount" placeholder="Kosten" step="0.01" class="wish-input wish-input-amt">
       <select id="wishCurrency" class="wish-input wish-input-ccy">
         <option value="CHF">CHF</option>
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
         <option value="GBP">GBP</option>
       </select>
-      <button class="wish-add-btn" id="wishAddBtn" onclick="window.__addWish && window.__addWish()">+ Add</button>
+      <button class="wish-add-btn" id="wishAddBtn" onclick="window.__addWish && window.__addWish()">+ Hinzufügen</button>
     </div>
   </div>
 
   <!-- Items list -->
   <div class="wish-section-h">
-    <span class="wish-section-label">YOUR WISHES</span>
-    <span class="wish-section-count" id="wishCount">0 items</span>
+    <span class="wish-section-label">DEINE WÜNSCHE</span>
+    <span class="wish-section-count" id="wishCount">0 Artikel</span>
   </div>
   <div id="wishList"></div>
   <div class="wish-empty-card" id="wishEmpty">
     <div class="wish-empty-icon">🎯</div>
-    <div class="wish-empty-title">No wishes yet</div>
-    <div class="wish-empty-sub">Add anything you're saving for — the dashboard will calculate what % of your net worth it'd cost.</div>
+    <div class="wish-empty-title">Noch keine Wünsche</div>
+    <div class="wish-empty-sub">Füge Dinge hinzu, auf die du sparst — das Dashboard berechnet, wie viel % deines Vermögens sie kosten würden.</div>
   </div>
 </div>
 
 </div>
 
 <!-- ===== BOTTOM TAB BAR ===== -->
-<nav class="bottom-tabs" id="bottomTabs" aria-label="Sections">
+<nav class="bottom-tabs" id="bottomTabs" aria-label="Bereiche">
   <button class="bot-tab active" data-tab="net">
     <span class="bot-tab-icon">📊</span>
-    <span class="bot-tab-label">Net Worth</span>
+    <span class="bot-tab-label">Vermögen</span>
   </button>
   <button class="bot-tab" data-tab="subs">
     <span class="bot-tab-icon">🔁</span>
-    <span class="bot-tab-label">Subs</span>
+    <span class="bot-tab-label">Abos</span>
   </button>
   <button class="bot-tab" data-tab="incoming">
     <span class="bot-tab-icon">📦</span>
-    <span class="bot-tab-label">Orders</span>
+    <span class="bot-tab-label">Bestellungen</span>
   </button>
   <button class="bot-tab" data-tab="wish">
     <span class="bot-tab-icon">🎯</span>
-    <span class="bot-tab-label">Wishlist</span>
+    <span class="bot-tab-label">Wünsche</span>
   </button>
 </nav>
 
@@ -1910,9 +1910,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   // ============================================================
   const ORD_FROM_META = {
     bank:   { name: 'Bank',   color: '#7DD3FC' },
-    stocks: { name: 'Stocks', color: '#6EE7B7' },
+    stocks: { name: 'Aktien', color: '#6EE7B7' },
     crypto: { name: 'Crypto', color: '#FBBF24' },
-    other:  { name: 'Other',  color: '#B794F4' }
+    other:  { name: 'Andere', color: '#B794F4' }
   };
 
   // ============================================================
@@ -1988,12 +1988,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       const name = document.createElement('span');
       name.className = 'nw-name nw-name-edit';
       name.textContent = it.name;
-      name.title = 'Tap to rename';
+      name.title = 'Antippen zum Umbenennen';
       name.addEventListener('click', () => beginNwNameEdit(name, items, idx, cat.key));
       const amt = document.createElement('span');
       amt.className = 'nw-amt nw-amt-edit';
       amt.textContent = fmtMoney(it.amount);
-      amt.title = 'Tap to edit · type +500 to add, -200 to subtract, or a new total';
+      amt.title = 'Antippen zum Bearbeiten · +500 addiert, -200 zieht ab, oder neuen Gesamtwert eingeben';
       amt.addEventListener('click', () => beginNwAmountEdit(amt, items, idx, cat.key));
       const del = document.createElement('button'); del.className = 'nw-del'; del.textContent = '×';
       del.addEventListener('click', () => {
@@ -2119,8 +2119,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     if (dayStart === today) {
       return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     }
-    if (dayStart === yesterday) return 'yest';
-    const mons = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    if (dayStart === yesterday) return 'gestern';
+    const mons = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
     return mons[d.getMonth()] + ' ' + d.getDate();
   }
   function renderActivity() {
@@ -2137,17 +2137,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
     list.classList.remove('hidden');
     empty.classList.add('hidden');
-    count.textContent = arr.length + ' event' + (arr.length === 1 ? '' : 's');
+    count.textContent = arr.length + ' Ereignis' + (arr.length === 1 ? '' : 'se');
     list.innerHTML = arr.slice(0, 30).map(e => {
       const meta = NW_SLICE_META[e.cat] || { name: e.cat, color: '#FFFFFF' };
       const sign = e.delta >= 0 ? '+' : '—';
       const cls = e.delta >= 0 ? 'up' : 'down';
       const amt = fmtMoney(Math.abs(e.delta));
-      const kind = e.kind === 'edit' ? 'EDIT' : (e.kind === 'delete' ? 'DELETE' : 'ADD');
+      const kind = e.kind === 'edit' ? 'BEARBEITET' : (e.kind === 'delete' ? 'GELÖSCHT' : 'HINZUGEFÜGT');
       return '<div class="nw-activity-row" style="color:' + meta.color + '">'
         + '<span class="nw-activity-bar" style="background:' + meta.color + '"></span>'
         + '<div class="nw-activity-info">'
-        +   '<div class="nw-activity-name">' + escapeHtml(e.name || '(unnamed)') + '</div>'
+        +   '<div class="nw-activity-name">' + escapeHtml(e.name || '(ohne Namen)') + '</div>'
         +   '<div class="nw-activity-meta">' + meta.name + ' · ' + kind + '</div>'
         + '</div>'
         + '<span class="nw-activity-amt ' + cls + '">' + sign + amt + '</span>'
@@ -2163,10 +2163,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   // ============================================================
   const NW_SLICE_META = {
     bank:   { name: 'Bank',     color: '#7DD3FC' },
-    stocks: { name: 'Stocks',   color: '#6EE7B7' },
+    stocks: { name: 'Aktien',   color: '#6EE7B7' },
     crypto: { name: 'Crypto',   color: '#FBBF24' },
-    other:  { name: 'Other',    color: '#B794F4' },
-    subs:   { name: 'Subs/yr',  color: '#FF8A8A' }
+    other:  { name: 'Andere',   color: '#B794F4' },
+    subs:   { name: 'Abos/Jahr', color: '#FF8A8A' }
   };
   function donutArcPath(cx, cy, rOuter, rInner, startAngle, endAngle) {
     const x1o = cx + rOuter * Math.cos(startAngle);
@@ -2205,7 +2205,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         if (v > 0) {
           slices.push({
             key: cat.key + '::' + i,
-            name: String(it.name || '(unnamed)'),
+            name: String(it.name || '(ohne Namen)'),
             color: meta.color,
             value: v
           });
@@ -2233,7 +2233,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
     empty.classList.add('hidden');
     total.textContent = fmtMoney(grand).split(' ')[1] || fmtMoney(grand);
-    count.textContent = slices.length + ' slice' + (slices.length === 1 ? '' : 's');
+    count.textContent = slices.length + ' Bereich' + (slices.length === 1 ? '' : 'e');
 
     // Sort largest first
     slices.sort((a, b) => b.value - a.value);
@@ -2318,7 +2318,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       if (direction === 'up')   deltaEl.classList.add('up');
       if (direction === 'down') deltaEl.classList.add('down');
       if (direction === 'flat') {
-        deltaEl.textContent = 'Flat';
+        deltaEl.textContent = 'Gleich';
       } else if (Math.abs(first) < 0.5) {
         // Baseline was effectively zero — % would be infinite. Show the
         // absolute amount instead so "added 1,276" reads clearly.
@@ -2495,52 +2495,53 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       row.className = 'sub-row' + (isUrgent ? ' is-urgent' : '');
       row.style.cssText = 'display:grid;grid-template-columns:1fr auto auto;align-items:center;padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:var(--radius-md);margin-bottom:8px;gap:12px;';
       const renewLine = it.renewal
-        ? '<div class="sub-renew-line" style="font-size:10px;color:#F2C063;margin-top:3px">↻ Renews ' + formatRenewal(it.renewal) + '</div>'
+        ? '<div class="sub-renew-line" style="font-size:10px;color:#F2C063;margin-top:3px">↻ Verlängert sich ' + formatRenewal(it.renewal) + '</div>'
         : '';
       // Linked NW account + auto-deduct toggle pills
       let metaLine = '';
       const pills = [];
       if (it.fromCat && it.fromAccount) {
-        pills.push('<span class="sub-from-pill">from · ' + escapeHtml(it.fromAccount) + '</span>');
+        pills.push('<span class="sub-from-pill">von · ' + escapeHtml(it.fromAccount) + '</span>');
       }
       pills.push(
-        '<button class="sub-row-toggle' + (it.autoDeduct ? ' is-on' : '') + '" data-sub-toggle="' + idx + '" type="button" title="Auto-deduct from the linked account on each renewal">'
+        '<button class="sub-row-toggle' + (it.autoDeduct ? ' is-on' : '') + '" data-sub-toggle="' + idx + '" type="button" title="Bei jeder Verlängerung automatisch vom verknüpften Konto abziehen">'
         + '<span class="sub-row-toggle-dot"></span>'
-        + (it.autoDeduct ? 'Auto-deduct ON' : 'Auto-deduct off')
+        + (it.autoDeduct ? 'Auto-Abzug AN' : 'Auto-Abzug aus')
         + '</button>'
       );
       metaLine = '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">' + pills.join('') + '</div>';
 
       const left = document.createElement('div');
       left.style.cssText = 'min-width:0';
+      const periodText = { monthly: 'Monatlich', yearly: 'Jährlich', weekly: 'Wöchentlich' }[it.period] || it.period;
       left.innerHTML = '<div style="font-weight:600;color:var(--text-primary);font-size:14px">' + escapeHtml(it.name) + '</div>' +
-        '<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;text-transform:capitalize">' + it.period + '</div>' +
+        '<div style="font-size:11px;color:var(--text-tertiary);margin-top:2px;text-transform:capitalize">' + periodText + '</div>' +
         renewLine +
         metaLine;
       const cost = document.createElement('div');
       cost.style.cssText = 'text-align:right;line-height:1.1';
       const bigNum = fmtMoney(m);
       const origHint = (it.entered_currency && it.entered_currency !== 'CHF' && it.entered_amount != null)
-        ? '<div style="font-size:10px;color:var(--text-tertiary);margin-top:2px">billed ' + it.entered_currency + ' ' + Number(it.entered_amount).toLocaleString('en-US', { minimumFractionDigits: it.entered_amount % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 }) + ' / ' + it.period + '</div>'
+            ? '<div style="font-size:10px;color:var(--text-tertiary);margin-top:2px">berechnet ' + it.entered_currency + ' ' + Number(it.entered_amount).toLocaleString('en-US', { minimumFractionDigits: it.entered_amount % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 }) + ' / ' + periodText + '</div>'
         : (it.period !== 'monthly'
-            ? '<div style="font-size:10px;color:var(--text-tertiary);margin-top:2px">billed ' + fmtMoney(it.amount) + ' / ' + it.period + '</div>'
+            ? '<div style="font-size:10px;color:var(--text-tertiary);margin-top:2px">berechnet ' + fmtMoney(it.amount) + ' / ' + periodText + '</div>'
             : '');
       cost.innerHTML = '<div style="font-size:20px;font-weight:700;color:var(--text-primary);font-variant-numeric:tabular-nums">' + bigNum + '</div>' +
-        '<div style="font-size:10px;color:var(--text-tertiary);margin-top:1px">/ month</div>' +
+        '<div style="font-size:10px;color:var(--text-tertiary);margin-top:1px">/ Monat</div>' +
         origHint;
       const actions = document.createElement('div');
       actions.style.cssText = 'display:flex;flex-direction:column;gap:4px;align-items:center';
       const editBtn = document.createElement('button');
-      editBtn.title = 'Edit';
+      editBtn.title = 'Bearbeiten';
       editBtn.style.cssText = 'background:transparent;border:1px solid rgba(255,255,255,0.10);color:var(--text-tertiary);cursor:pointer;font-size:12px;padding:3px 7px;border-radius:5px;font-family:inherit;line-height:1';
       editBtn.textContent = '✏';
       editBtn.addEventListener('click', () => editSubInline(idx));
       const del = document.createElement('button');
-      del.title = 'Delete';
+      del.title = 'Löschen';
       del.style.cssText = 'background:transparent;border:1px solid rgba(255,255,255,0.10);color:var(--text-tertiary);cursor:pointer;font-size:12px;padding:3px 7px;border-radius:5px;font-family:inherit;line-height:1';
       del.textContent = '×';
       del.addEventListener('click', () => {
-        if (!confirm('Delete "' + it.name + '"?')) return;
+        if (!confirm('"' + it.name + '" löschen?')) return;
         items.splice(idx, 1); storeSet('subs', items); renderSubs();
       });
       actions.appendChild(editBtn);
@@ -2556,7 +2557,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         const arr = storeGet('subs') || [];
         if (!arr[i]) return;
         if (!arr[i].autoDeduct && (!arr[i].fromCat || !arr[i].fromAccount)) {
-          alert('Pick a "From account" first (use the ✏ edit button) so the deduction knows where to take the money from.');
+          alert('Wähle zuerst ein Konto aus (über ✏ Bearbeiten), damit klar ist, wo das Geld abgezogen wird.');
           return;
         }
         arr[i].autoDeduct = !arr[i].autoDeduct;
@@ -2564,9 +2565,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         renderSubs();
       });
     });
-    subsTotal.innerHTML = fmtMoney(monthly) + ' <span style="font-size:13px;color:var(--text-tertiary);font-weight:500">/ mo</span>';
-    subsYearly.textContent = '~' + fmtMoney(monthly * 12) + ' per year';
-    subsCount.textContent = items.length + (items.length === 1 ? ' subscription' : ' subscriptions');
+    subsTotal.innerHTML = fmtMoney(monthly) + ' <span style="font-size:13px;color:var(--text-tertiary);font-weight:500">/ Monat</span>';
+    subsYearly.textContent = '~' + fmtMoney(monthly * 12) + ' pro Jahr';
+    subsCount.textContent = items.length + (items.length === 1 ? ' Abo' : ' Abos');
     // Re-render the donut so the subs slice updates with the latest annualized total
     if (typeof renderAllNetWorth === 'function') renderAllNetWorth();
   }
@@ -2582,7 +2583,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     const accounts = (typeof listAllNwAccounts === 'function') ? listAllNwAccounts() : [];
     const ICONS = { bank: '🏦', stocks: '📈', crypto: '🪙', other: '💼' };
     if (!accounts.length) {
-      sel.innerHTML = '<option value="">No accounts yet</option>';
+      sel.innerHTML = '<option value="">Noch keine Konten</option>';
       sel.disabled = true;
       return;
     }
@@ -2650,8 +2651,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     if (!row) return;
     const enteredCcy = it.entered_currency || 'CHF';
     const enteredAmt = it.entered_amount != null ? it.entered_amount : it.amount;
+    const periodLabels = { monthly: 'Monatlich', yearly: 'Jährlich', weekly: 'Wöchentlich' };
     const periodOpts = ['monthly','yearly','weekly'].map(p =>
-      '<option value="' + p + '"' + (p === it.period ? ' selected' : '') + '>' + p.charAt(0).toUpperCase() + p.slice(1) + '</option>'
+      '<option value="' + p + '"' + (p === it.period ? ' selected' : '') + '>' + (periodLabels[p] || p) + '</option>'
     ).join('');
     const ccyOpts = ['CHF','USD','EUR','GBP'].map(c =>
       '<option value="' + c + '"' + (c === enteredCcy ? ' selected' : '') + '>' + c + '</option>'
@@ -2660,7 +2662,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     const accounts = (typeof listAllNwAccounts === 'function') ? listAllNwAccounts() : [];
     const ICONS = { bank: '🏦', stocks: '📈', crypto: '🪙', other: '💼' };
     const currentFrom = (it.fromCat && it.fromAccount) ? (it.fromCat + '::' + it.fromAccount) : '';
-    const fromOpts = '<option value="">No account linked</option>' + accounts.map(a => {
+    const fromOpts = '<option value="">Kein Konto verknüpft</option>' + accounts.map(a => {
       const v = a.catKey + '::' + a.itemName;
       return '<option value="' + v + '"' + (v === currentFrom ? ' selected' : '') + '>' + ICONS[a.catKey] + ' ' + escapeHtml(a.itemName) + '</option>';
     }).join('');
@@ -2676,9 +2678,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       '<select class="se-per" style="padding:6px 10px;border:0.5px solid rgba(255,255,255,0.10);border-radius:var(--radius-md);font-size:12px;font-family:inherit;background:var(--bg-card);color:var(--text-primary)">' + periodOpts + '</select>' +
       '<label class="date-field" style="min-width:140px"><span class="date-emoji" aria-hidden="true">📅</span><input type="date" class="se-ren" value="' + (it.renewal && /^\d{4}-\d{2}-\d{2}/.test(it.renewal) ? it.renewal.slice(0,10) : '') + '" /></label>' +
       '<select class="se-from" style="padding:6px 10px;border:0.5px solid rgba(255,255,255,0.10);border-radius:var(--radius-md);font-size:12px;font-family:inherit;background:var(--bg-card);color:var(--text-primary);min-width:130px">' + fromOpts + '</select>' +
-      '<label class="sub-auto-toggle" style="padding:6px 10px"><input type="checkbox" class="se-auto"' + (it.autoDeduct ? ' checked' : '') + ' /><span class="sub-auto-track"><span class="sub-auto-thumb"></span></span><span class="sub-auto-label">Auto-deduct</span></label>' +
-      '<button class="se-save quick-add-btn">Save</button>' +
-      '<button class="se-cancel" style="background:transparent;border:1px solid rgba(255,255,255,0.10);color:var(--text-tertiary);cursor:pointer;font-size:12px;padding:6px 10px;border-radius:var(--radius-md);font-family:inherit">Cancel</button>';
+      '<label class="sub-auto-toggle" style="padding:6px 10px"><input type="checkbox" class="se-auto"' + (it.autoDeduct ? ' checked' : '') + ' /><span class="sub-auto-track"><span class="sub-auto-thumb"></span></span><span class="sub-auto-label">Automatisch abziehen</span></label>' +
+      '<button class="se-save quick-add-btn">Speichern</button>' +
+      '<button class="se-cancel" style="background:transparent;border:1px solid rgba(255,255,255,0.10);color:var(--text-tertiary);cursor:pointer;font-size:12px;padding:6px 10px;border-radius:var(--radius-md);font-family:inherit">Abbrechen</button>';
     row.appendChild(form);
     const save = () => {
       const newName = row.querySelector('.se-name').value.trim();
@@ -2694,7 +2696,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         if (ix > 0) { newFromCat = newFromVal.slice(0, ix); newFromAccount = newFromVal.slice(ix + 2); }
       }
       if (newAuto && (!newFromCat || !newFromAccount)) {
-        alert('Pick a "From account" — auto-deduct needs somewhere to take the money from.');
+        alert('Wähle ein Konto aus. Der automatische Abzug muss wissen, wo das Geld abgezogen wird.');
         return;
       }
       if (!newName || isNaN(newAmtRaw)) return;
@@ -2739,7 +2741,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       const autoDeduct = !!(tEl && tEl.checked);
       // Guard: auto-deduct requires a linked account
       if (autoDeduct && (!fromCat || !fromAccount)) {
-        alert('Pick a "From account" first — auto-deduct needs to know where to take the money from.');
+        alert('Wähle zuerst ein Konto aus. Der automatische Abzug muss wissen, wo das Geld abgezogen wird.');
         return;
       }
       const items = storeGet('subs') || [];
@@ -2812,13 +2814,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         heroPctEl.className = 'wish-hero-pct-num' + (cls === 'good' ? '' : (cls === 'warn' ? ' warn' : ' bad'));
       }
       if (heroFill) heroFill.style.width = Math.min(100, pct) + '%';
-      if (wishPctEl) wishPctEl.textContent = 'Your wishlist is ' + pct.toFixed(2) + '% of your ' + fmtMoney(grand) + ' net worth';
+      if (wishPctEl) wishPctEl.textContent = 'Deine Wunschliste entspricht ' + pct.toFixed(2) + '% deines Vermögens von ' + fmtMoney(grand);
     } else {
       if (heroPctEl) { heroPctEl.textContent = '—'; heroPctEl.className = 'wish-hero-pct-num'; }
       if (heroFill) heroFill.style.width = '0%';
-      if (wishPctEl) wishPctEl.textContent = 'Add accounts in Net Worth first to see this as a %';
+      if (wishPctEl) wishPctEl.textContent = 'Füge zuerst Vermögen hinzu, um den Prozentwert zu sehen';
     }
-    if (wishCountEl) wishCountEl.textContent = items.length + (items.length === 1 ? ' item' : ' items');
+    if (wishCountEl) wishCountEl.textContent = items.length + (items.length === 1 ? ' Artikel' : ' Artikel');
 
     wishList.innerHTML = '';
     if (!items.length) { if (wishEmpty) wishEmpty.classList.remove('hidden'); return; }
@@ -2839,13 +2841,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
           '<div class="wish-row-h">'
         + '<div class="wish-row-info">'
         +   '<div class="wish-row-name">' + escapeHtml(it.name) + '</div>'
-        +   '<div class="wish-row-meta">' + (it.entered_currency || 'CHF') + ' ' + Number(it.entered_amount != null ? it.entered_amount : it.amount).toLocaleString('en-US', {maximumFractionDigits: 2}) + ' · added ' + fmtActivityDate(it.ts || Date.now()) + '</div>'
+        +   '<div class="wish-row-meta">' + (it.entered_currency || 'CHF') + ' ' + Number(it.entered_amount != null ? it.entered_amount : it.amount).toLocaleString('en-US', {maximumFractionDigits: 2}) + ' · hinzugefügt ' + fmtActivityDate(it.ts || Date.now()) + '</div>'
         + '</div>'
         + '<div class="wish-row-amt-wrap">'
         +   '<div class="wish-row-amt">' + fmtMoney(cost) + '</div>'
-        +   '<div class="wish-row-pct ' + cls + '">' + pctText + ' of NW</div>'
+        +   '<div class="wish-row-pct ' + cls + '">' + pctText + ' vom Vermögen</div>'
         + '</div>'
-        + '<button class="wish-row-x" data-i="' + idx + '" aria-label="Remove">×</button>'
+        + '<button class="wish-row-x" data-i="' + idx + '" aria-label="Entfernen">×</button>'
         + '</div>'
         + '<div class="wish-row-bar"><div class="wish-row-bar-fill ' + cls + '" style="width:' + fillPct + '%"></div></div>';
       wishList.appendChild(row);
@@ -2930,12 +2932,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     const dayStart = new Date(d.getFullYear(), d.getMonth(), d.getDate());
     const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const diffDays = Math.round((dayStart - todayStart) / 86400000);
-    const dateLabel = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    const dateLabel = d.toLocaleDateString('de-DE', { weekday: 'short', month: 'short', day: 'numeric' });
     let cls = '', prefix = '';
-    if (diffDays < 0)        { cls = 'past';  prefix = 'late · '; }
-    else if (diffDays === 0) { cls = 'today'; prefix = 'today · '; }
-    else if (diffDays === 1) { cls = 'soon';  prefix = 'tomorrow · '; }
-    else if (diffDays <= 7)  { cls = 'soon';  prefix = 'in ' + diffDays + 'd · '; }
+    if (diffDays < 0)        { cls = 'past';  prefix = 'überfällig · '; }
+    else if (diffDays === 0) { cls = 'today'; prefix = 'heute · '; }
+    else if (diffDays === 1) { cls = 'soon';  prefix = 'morgen · '; }
+    else if (diffDays <= 7)  { cls = 'soon';  prefix = 'in ' + diffDays + ' Tagen · '; }
     return { cls, label: prefix + dateLabel };
   }
   // Build the flat list of every NW account (across all 4 categories) so
@@ -2965,7 +2967,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     const prev = sel.value;
     const ICONS = { bank: '🏦', stocks: '📈', crypto: '🪙', other: '💼' };
     if (!accounts.length) {
-      sel.innerHTML = '<option value="">No accounts yet</option>';
+      sel.innerHTML = '<option value="">Noch keine Konten</option>';
       sel.disabled = true;
       return;
     }
@@ -2985,7 +2987,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     populateOrdFromSelect();
     const items = storeGet('incoming_orders') || [];
     const grand = nwGrandCHF();
-    if (count) count.textContent = items.length + (items.length === 1 ? ' item' : ' items');
+    if (count) count.textContent = items.length + (items.length === 1 ? ' Artikel' : ' Artikel');
     // Always clear before painting — earlier this re-rendered as an APPEND
     // (so every NW change duplicated the cards). Now it's an idempotent paint.
     list.innerHTML = '';
@@ -3006,15 +3008,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       let pct, pctText, pctCls;
       if (isDeducted && typeof o.pctAtDeduction === 'number') {
         pct = o.pctAtDeduction;
-        pctText = pct.toFixed(2) + '% of NW';
+        pctText = pct.toFixed(2) + '% vom Vermögen';
         pctCls = ordPctClass(pct) + ' frozen';
       } else if (grand > 0) {
         pct = (cost / grand) * 100;
-        pctText = pct.toFixed(2) + '% of NW';
+        pctText = pct.toFixed(2) + '% vom Vermögen';
         pctCls = ordPctClass(pct);
       } else {
         pct = null;
-        pctText = '— of NW';
+        pctText = '— vom Vermögen';
         pctCls = '';
       }
       const fromMeta = ORD_FROM_META[o.fromCat] || ORD_FROM_META.bank;
@@ -3022,25 +3024,25 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       const arr = ordFmtArrival(o.date);
       const arrHtml = arr
         ? '<span class="ord-meta-pill date ' + arr.cls + '">' + arr.label + '</span>'
-        : '<span class="ord-meta-pill date">no arrival</span>';
+        : '<span class="ord-meta-pill date">kein Lieferdatum</span>';
       const row = document.createElement('div');
       row.className = 'ord-card cat-' + (o.fromCat || 'bank') + (isDeducted ? ' is-deducted' : '');
       const footHtml = isDeducted
         ? '<div class="ord-card-foot">'
-          +   '<span class="ord-deducted-pill">Deducted from ' + escapeHtml(o.deductedFrom && o.deductedFrom.name ? o.deductedFrom.name : fromAccountLabel) + '</span>'
-          +   '<button class="ord-deduct-undo" data-undo-id="' + o.id + '">Undo</button>'
+          +   '<span class="ord-deducted-pill">Abgezogen von ' + escapeHtml(o.deductedFrom && o.deductedFrom.name ? o.deductedFrom.name : fromAccountLabel) + '</span>'
+          +   '<button class="ord-deduct-undo" data-undo-id="' + o.id + '">Rückgängig</button>'
           + '</div>'
         : '<div class="ord-card-foot">'
-          +   '<button class="ord-deduct-btn" data-deduct-id="' + o.id + '">− Deduct from net worth</button>'
+          +   '<button class="ord-deduct-btn" data-deduct-id="' + o.id + '">− Vom Vermögen abziehen</button>'
           + '</div>';
       row.innerHTML =
           '<div class="ord-card-h">'
         +   '<div class="ord-card-name">' + escapeHtml(o.name) + '</div>'
         +   '<div class="ord-card-amt">' + fmtMoney(cost) + '</div>'
-        +   '<button class="ord-card-x" data-id="' + o.id + '" aria-label="Remove">×</button>'
+        +   '<button class="ord-card-x" data-id="' + o.id + '" aria-label="Entfernen">×</button>'
         + '</div>'
         + '<div class="ord-card-meta">'
-        +   '<span class="ord-meta-pill from">from · ' + fromAccountLabel + '</span>'
+        +   '<span class="ord-meta-pill from">von · ' + fromAccountLabel + '</span>'
         +   '<span class="ord-meta-pill pct ' + pctCls + '">' + pctText + '</span>'
         +   arrHtml
         + '</div>'
@@ -3078,7 +3080,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     if (!order) return;
     const accounts = listAllNwAccounts();
     if (!accounts.length) {
-      alert('Add at least one net worth account before deducting.');
+      alert('Füge zuerst mindestens ein Vermögenskonto hinzu, bevor du etwas abziehst.');
       return;
     }
     const ICONS = { bank: '🏦', stocks: '📈', crypto: '🪙', other: '💼' };
@@ -3092,20 +3094,20 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         + (insufficient ? 'data-insuf="1" ' : '')
         + '>'
         + ICONS[a.catKey] + ' ' + escapeHtml(a.itemName)
-        + '<small>' + fmtMoney(a.amountCHF) + (insufficient ? ' · not enough' : ' available') + '</small>'
+        + '<small>' + fmtMoney(a.amountCHF) + (insufficient ? ' · nicht genug' : ' verfügbar') + '</small>'
         + '</button>';
     }).join('');
     const chooser = document.createElement('div');
     chooser.className = 'ord-deduct-chooser';
     chooser.innerHTML =
-        '<div class="ord-deduct-chooser-title">Deduct ' + fmtMoney(cost) + ' from…</div>'
+        '<div class="ord-deduct-chooser-title">' + fmtMoney(cost) + ' abziehen von…</div>'
       + '<div class="ord-deduct-options">' + optsHtml + '</div>'
-      + '<button class="ord-deduct-cancel" type="button">cancel</button>';
+      + '<button class="ord-deduct-cancel" type="button">abbrechen</button>';
     cardEl.appendChild(chooser);
     chooser.querySelectorAll('.ord-deduct-opt').forEach(b => {
       b.addEventListener('click', () => {
         if (b.dataset.insuf === '1') {
-          if (!confirm('That account doesn\'t have enough — deduct anyway? (it will go negative)')) return;
+          if (!confirm('Auf diesem Konto ist nicht genug — trotzdem abziehen? Es wird dann negativ.')) return;
         }
         confirmDeduct(orderId, b.dataset.cat, b.dataset.name);
       });
@@ -3121,7 +3123,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     const items = storeGet('nw:' + catKey) || [];
     const itemIdx = items.findIndex(it => String(it.name) === String(itemName));
     if (itemIdx < 0) {
-      alert('That account no longer exists. Refresh the chooser.');
+      alert('Dieses Konto existiert nicht mehr. Öffne die Auswahl bitte neu.');
       return;
     }
     const cost = Number(order.amount) || 0;
@@ -3177,7 +3179,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     if (!prev) return;
     const aRaw = parseFloat(costEl && costEl.value);
     if (!costEl || isNaN(aRaw) || aRaw <= 0) {
-      prev.textContent = 'Type a cost — preview will show what % of net worth it takes.';
+      prev.textContent = 'Gib Kosten ein — dann siehst du, wie viel % deines Vermögens es kostet.';
       prev.className = 'ord-add-preview';
       return;
     }
@@ -3190,10 +3192,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     if (grand > 0) {
       const pct = (amountCHF / grand) * 100;
       const cls = ordPctClass(pct);
-      prev.textContent = fmtMoney(amountCHF) + ' from ' + fromName + ' · ' + pct.toFixed(2) + '% of your ' + fmtMoney(grand) + ' net worth';
+      prev.textContent = fmtMoney(amountCHF) + ' von ' + fromName + ' · ' + pct.toFixed(2) + '% deines Vermögens von ' + fmtMoney(grand);
       prev.className = 'ord-add-preview ' + (cls === 'good' ? '' : cls);
     } else {
-      prev.textContent = fmtMoney(amountCHF) + ' from ' + fromName + ' · add net worth first to see %';
+      prev.textContent = fmtMoney(amountCHF) + ' von ' + fromName + ' · füge zuerst Vermögen hinzu, um % zu sehen';
       prev.className = 'ord-add-preview';
     }
   }
@@ -3336,12 +3338,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     // Paint the items as overlapping absolute layers; .active is the visible one
     stream.innerHTML = entries.map((e, i) => {
       const daysLabel = e.days < 0
-        ? Math.abs(e.days) + 'd late'
+        ? Math.abs(e.days) + ' Tage spät'
         : e.days === 0
-          ? 'TODAY'
+          ? 'HEUTE'
           : e.days === 1
-            ? 'TOMORROW'
-            : 'in ' + e.days + 'd';
+            ? 'MORGEN'
+            : 'in ' + e.days + ' Tagen';
       return '<div class="ticker-item' + (i === tickerIdx ? ' active' : '') + '" data-i="' + i + '">'
         +   '<span class="ticker-item-name">' + escapeHtml(e.name) + '</span>'
         +   '<span class="ticker-item-amt">' + fmtMoney(e.amount) + '</span>'
