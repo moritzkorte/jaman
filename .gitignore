@@ -3,3 +3,12 @@
 .vscode/
 .idea/
 *.swp
+
+# Next.js / local app runtime
+.env
+.env.*
+.next
+.vercel
+node_modules
+tsconfig.tsbuildinfo
+npm-debug.log*
