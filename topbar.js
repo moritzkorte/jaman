@@ -191,7 +191,7 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
   <a href="health.html" class="bottombar-tab" data-page="health">
     <span class="bottombar-tab-icon">💊</span><span>Gesundheit</span>
   </a>
-  <a href="/workout" class="bottombar-tab" data-page="fitness">
+  <a href="gym.html" class="bottombar-tab" data-page="fitness">
     <span class="bottombar-tab-icon">💪</span><span>Fitness</span>
   </a>
 </nav>`;
@@ -210,7 +210,7 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
   function currentPageKey() {
     const p = (window.location.pathname || '').toLowerCase();
     if (p.endsWith('health.html')) return 'health';
-    if (p.endsWith('gym.html') || p.endsWith('/workout') || p.endsWith('workout')) return 'fitness';
+    if (p.endsWith('gym.html')) return 'fitness';
     return 'main';
   }
 

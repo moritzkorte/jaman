@@ -1,6 +1,6 @@
 # Persönliches Dashboard
 
-Eine Sammlung kleiner HTML-Apps mit gemeinsamer Navigation. Der Fitnessbereich ist jetzt direkt als Next.js-App aus `New Project 8` integriert.
+Eine Sammlung kleiner HTML-Apps, die direkt im Browser laufen und eine gemeinsame Navigation nutzen.
 
 ## Eigene Kopie deployen
 
@@ -10,14 +10,7 @@ Ein Klick → Vercel meldet dich an, kopiert das Repo in dein GitHub-Konto und d
 
 ## Nutzung
 
-Für die reinen HTML-Seiten reicht weiterhin ein Browser. Für den neuen Fitnessbereich muss das Projekt als App laufen, weil Workout-Login, Speichern und Supabase über kleine Server-Funktionen gehen.
-
-```bash
-npm install
-npm run dev
-```
-
-Danach im Browser `http://localhost:3000` öffnen.
+Du kannst jede `.html`-Datei direkt im Browser öffnen. Kein Build, keine Installation.
 
 | Datei | Bedeutung |
 |---|---|
@@ -25,7 +18,7 @@ Danach im Browser `http://localhost:3000` öffnen.
 | [health.html](health.html) | Supplement- und Daily-Stack-Tracker |
 | [po-water.html](po-water.html) | Wasser-Tracker |
 | [finance.html](finance.html) | Finanzen |
-| [gym.html](gym.html) | Weiterleitung zum integrierten Fitnessbereich |
+| [gym.html](gym.html) | Gym-Tracker für Progression |
 | [topbar.js](topbar.js) | Gemeinsame Navigation, die automatisch in die Seiten eingefügt wird |
 
 Jede App speichert Daten im Browser unter `localStorage`. Mit Supabase-Sync laufen die Daten zusätzlich über die Cloud.
@@ -41,7 +34,7 @@ Diese Dateien verwenden die Werte:
 
 - `sync.js`: `SUPABASE_URL`, `SUPABASE_KEY`
 - `topbar.js`: `TOPBAR_SUPABASE_URL`, `TOPBAR_SUPABASE_KEY`
-- Fitness-App: `.env.local` mit `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `APP_PASSCODE` und `COOKIE_SECRET`
+- `gym.html`: `SUPABASE_URL`, `SUPABASE_KEY`
 
 Die Datenbank für `app_state` und der Storage-Bucket `progress-photos` wurden bereits im Supabase-Projekt `meine app` angelegt. Wenn du später ein anderes Supabase-Projekt nutzt, musst du die SQL-Blöcke aus `SQL` und `Gym fix 2` dort erneut ausführen.
 
