@@ -1,13 +1,36 @@
 // =============================================================
 // Shared cloud-sync helper. Each page calls initCloudSync({...}).
-// Replace the two placeholders with your Supabase project URL +
-// publishable key (same ones you used in topbar.js/gym.html).
+// It also starts one global dashboard sync so opening any page can
+// pull/push the common app data across laptop + phone.
 // =============================================================
 (function () {
   'use strict';
 
   const SUPABASE_URL = 'https://zsngolrittdtyqhgdwxi.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_dnuvjmDpB006xDjpnOx1XA_X1mQdPDs';
+  const GLOBAL_APP_KEY = 'dashboard';
+  const GLOBAL_SYNCED_KEYS = [
+    'po_water_v1',
+    'stack:items',
+    'stack:version',
+    'stack:low',
+    'habits_v1',
+    'subs',
+    'wishlist',
+    'incoming_orders',
+    'nw_currency',
+    'nw:activity',
+    'nw:history',
+    'po_coach_v1',
+    'po_coach_workout_done',
+    'po_coach_weights',
+    'po_coach_photos'
+  ];
+  const GLOBAL_SYNCED_PREFIXES = [
+    'goals:',
+    'stack:taken:',
+    'nw:'
+  ];
 
   window.initCloudSync = function (config) {
     const appKey = config && config.appKey;
@@ -77,11 +100,6 @@
             try { origSet(k, incoming); changed = true; } catch (e) {}
           }
         }
-        for (const k of listAllKeys()) {
-          if (!(k in remote)) {
-            try { origRemove(k); changed = true; } catch (e) {}
-          }
-        }
       } finally {
         suppressSync = false;
       }
@@ -136,7 +154,9 @@
         const { data, error } = await supa.from('app_state').select('data').eq('key', appKey).maybeSingle();
         if (!error && data && data.data && Object.keys(data.data).length > 0) {
           lastSyncedJson = JSON.stringify(data.data);
-          applyRemote(data.data);
+          const changed = applyRemote(data.data);
+          const mergedJson = JSON.stringify(collect());
+          if (changed || mergedJson !== lastSyncedJson) schedulePush();
         } else if (Object.keys(collect()).length > 0) {
           schedulePush();
         }
@@ -163,4 +183,21 @@
       if (e.key && matches(e.key)) schedulePush();
     });
   };
+
+  function onReady(fn) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn, { once: true });
+    else fn();
+  }
+
+  onReady(function () {
+    window.initCloudSync({
+      appKey: GLOBAL_APP_KEY,
+      syncedKeys: GLOBAL_SYNCED_KEYS,
+      syncedPrefixes: GLOBAL_SYNCED_PREFIXES,
+      onApplied: function () {
+        window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new CustomEvent('goals-changed'));
+      }
+    });
+  });
 })();
