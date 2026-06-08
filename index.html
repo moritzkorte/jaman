@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -66,8 +66,15 @@ body::after {
 }
 
 /* ===== Component 1: page title ===== */
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
 .dash-title {
-  margin: 0 0 14px;
+  margin: 0;
   font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.025em;
@@ -78,6 +85,336 @@ body::after {
   color: transparent;
 }
 @media (max-width: 480px) { .dash-title { font-size: 22px; } }
+.dash-settings-btn {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 10px 28px rgba(0,0,0,0.28);
+  transition: background 0.16s, border-color 0.16s, color 0.16s, transform 0.12s;
+}
+.dash-settings-btn svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.16s;
+}
+.dash-settings-btn:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.16);
+  color: var(--text-primary);
+}
+.dash-settings-btn:active { transform: translateY(1px) scale(0.98); }
+.dash-settings-btn:active svg { transform: rotate(18deg) translateY(1px); }
+
+/* ===== Settings modal ===== */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(0,0,0,0.62);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.modal-bg.show { display: flex; }
+.modal {
+  width: min(520px, 100%);
+  max-height: min(86vh, 760px);
+  overflow-y: auto;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(20,20,22,0.96), rgba(12,12,14,0.96)),
+    rgba(255,255,255,0.04);
+  color: var(--text-secondary);
+  box-shadow: 0 24px 70px rgba(0,0,0,0.62), inset 0 1px 0 rgba(255,255,255,0.05);
+  backdrop-filter: blur(28px) saturate(1.2);
+  -webkit-backdrop-filter: blur(28px) saturate(1.2);
+  padding: 20px;
+}
+.modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.modal-kicker {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 5px;
+}
+.modal h2 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+.modal-sub {
+  margin: 7px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-tertiary);
+}
+.modal-close {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-secondary);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.modal-close:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+  border-color: rgba(255,255,255,0.16);
+}
+.settings-grid {
+  display: grid;
+  gap: 12px;
+}
+.settings-field {
+  display: grid;
+  gap: 8px;
+  padding: 13px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.035);
+}
+.settings-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.settings-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.seg-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 999px;
+  background: rgba(0,0,0,0.24);
+}
+.seg-toggle button {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.seg-toggle button.active {
+  background: rgba(255,255,255,0.10);
+  color: var(--text-primary);
+}
+.settings-input-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.settings-input-row.two {
+  grid-template-columns: 1fr 1fr;
+}
+.settings-field input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 13px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  background: rgba(0,0,0,0.30);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 15px;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+}
+.settings-field input::placeholder { color: var(--text-tertiary); }
+.settings-field input:focus {
+  border-color: rgba(255,255,255,0.24);
+  background: rgba(0,0,0,0.38);
+}
+.unit-suffix {
+  position: relative;
+}
+.unit-suffix span {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+.unit-suffix input { padding-right: 44px; }
+.settings-divider {
+  height: 1px;
+  margin: 18px 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent);
+}
+.whoop-card {
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.035);
+}
+.whoop-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.whoop-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+.whoop-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+}
+.whoop-dot.connected {
+  background: var(--success);
+  box-shadow: 0 0 10px rgba(107,227,164,0.65);
+}
+.whoop-sync {
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.whoop-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.whoop-stat {
+  min-width: 0;
+  padding: 11px 10px;
+  border: 1px solid rgba(255,255,255,0.055);
+  border-radius: 12px;
+  background: rgba(0,0,0,0.22);
+}
+.whoop-stat-value {
+  color: var(--text-primary);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.whoop-stat-label {
+  margin-top: 3px;
+  color: var(--text-tertiary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+.settings-save-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.settings-save {
+  flex: 1;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #E8E5DD 100%);
+  color: #0A0A0B;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 8px 22px rgba(0,0,0,0.26);
+  transition: transform 0.1s, filter 0.15s;
+}
+.settings-save:hover { filter: brightness(1.05); transform: translateY(-1px); }
+.settings-save:active { transform: translateY(0); }
+.settings-confirm {
+  min-width: 78px;
+  color: var(--success);
+  font-size: 12px;
+  font-weight: 800;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 0.24s, transform 0.24s;
+}
+.settings-confirm.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.modal-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 11px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.modal-action:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.17);
+}
+.modal-action:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+@media (max-width: 480px) {
+  .modal { padding: 18px; }
+  .whoop-stats { grid-template-columns: 1fr; }
+  .settings-save-row { align-items: stretch; flex-direction: column; }
+  .settings-confirm { min-height: 16px; }
+}
 
 /* ===== Component 2: Goal Ticker ===== */
 .ticker-row {
@@ -598,7 +935,15 @@ body::after {
 <body>
 <div class="page">
 
-  <h1 class="dash-title">Mein Dashboard</h1>
+  <div class="dash-header">
+    <h1 class="dash-title">Mein Dashboard</h1>
+    <button class="dash-settings-btn" id="settingsOpenBtn" type="button" aria-label="Einstellungen öffnen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </svg>
+    </button>
+  </div>
 
   <div class="ticker-row">
     <div class="goal-ticker" id="goalTicker" aria-live="polite" aria-atomic="true">
@@ -691,6 +1036,115 @@ body::after {
     </div>
   </div>
 
+</div>
+
+<div class="modal-bg" id="settingsModalBg" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="modal-head">
+      <div>
+        <div class="modal-kicker">Einstellungen</div>
+        <h2 id="settingsModalTitle">Deine Daten</h2>
+        <p class="modal-sub">Diese Werte werden für Wasser, Koffein und die Gesundheitskarten gemeinsam genutzt.</p>
+      </div>
+      <button class="modal-close" id="settingsCloseBtn" type="button" aria-label="Einstellungen schließen">×</button>
+    </div>
+
+    <div class="settings-grid">
+      <div class="settings-field">
+        <div class="settings-label-row">
+          <label class="settings-label" for="settingsHeightCm">Größe</label>
+          <div class="seg-toggle" id="heightUnitSeg" aria-label="Größeneinheit">
+            <button type="button" data-unit="cm">cm</button>
+            <button type="button" data-unit="ftin">ft/in</button>
+          </div>
+        </div>
+        <div class="settings-input-row" id="heightCmRow">
+          <div class="unit-suffix">
+            <input id="settingsHeightCm" type="number" min="0" step="0.1" inputmode="decimal" placeholder="175">
+            <span>cm</span>
+          </div>
+        </div>
+        <div class="settings-input-row two" id="heightFtRow" hidden>
+          <div class="unit-suffix">
+            <input id="settingsHeightFt" type="number" min="0" step="1" inputmode="numeric" placeholder="5">
+            <span>ft</span>
+          </div>
+          <div class="unit-suffix">
+            <input id="settingsHeightIn" type="number" min="0" step="0.1" inputmode="decimal" placeholder="9">
+            <span>in</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-field">
+        <div class="settings-label-row">
+          <label class="settings-label" for="settingsWeight">Gewicht</label>
+          <div class="seg-toggle" id="weightUnitSeg" aria-label="Gewichtseinheit">
+            <button type="button" data-unit="kg">kg</button>
+            <button type="button" data-unit="lb">lb</button>
+          </div>
+        </div>
+        <div class="unit-suffix">
+          <input id="settingsWeight" type="number" min="0" step="0.1" inputmode="decimal" placeholder="75">
+          <span id="weightUnitSuffix">kg</span>
+        </div>
+      </div>
+
+      <div class="settings-field">
+        <label class="settings-label" for="settingsAge">Alter</label>
+        <input id="settingsAge" type="number" min="0" step="1" inputmode="numeric" placeholder="25">
+      </div>
+
+      <div class="settings-field">
+        <div class="settings-label-row">
+          <div class="settings-label">Geschlecht</div>
+          <div class="seg-toggle" id="sexSeg" aria-label="Geschlecht">
+            <button type="button" data-sex="m">Männlich</button>
+            <button type="button" data-sex="f">Weiblich</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-field">
+        <label class="settings-label" for="settingsActivity">Aktive Stunden / Woche</label>
+        <input id="settingsActivity" type="number" min="0" step="0.25" inputmode="decimal" placeholder="5">
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="whoop-card">
+      <div class="whoop-top">
+        <div>
+          <div class="whoop-status">
+            <span class="whoop-dot" id="whoopDot"></span>
+            <span id="whoopStatusText">Nicht verbunden</span>
+          </div>
+          <div class="whoop-sync" id="whoopSyncLine">Mit Health verbinden, um WHOOP-Daten zu sehen.</div>
+        </div>
+        <a class="modal-action" id="whoopActionBtn" href="health.html">Auf Health verbinden</a>
+      </div>
+      <div class="whoop-stats">
+        <div class="whoop-stat">
+          <div class="whoop-stat-value" id="whoopRecovery">—</div>
+          <div class="whoop-stat-label">Erholung</div>
+        </div>
+        <div class="whoop-stat">
+          <div class="whoop-stat-value" id="whoopSleep">—</div>
+          <div class="whoop-stat-label">Schlaf</div>
+        </div>
+        <div class="whoop-stat">
+          <div class="whoop-stat-value" id="whoopRestHr">—</div>
+          <div class="whoop-stat-label">Ruhepuls</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-save-row">
+      <button class="settings-save" id="settingsSaveBtn" type="button">Speichern</button>
+      <div class="settings-confirm" id="settingsSavedMsg">Gespeichert ✓</div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1290,6 +1744,331 @@ body::after {
     document.getElementById('tomorrowStatus'),
     loadTomorrow
   );
+
+  // ---------- Settings modal ----------
+  const WATER_KEY = 'po_water_v1';
+  const KG_PER_LB = 0.45359237;
+  const CM_PER_IN = 2.54;
+  const CM_PER_FT = 30.48;
+  let currentWeightUnit = 'kg';
+  let currentHeightUnit = 'cm';
+  let currentSex = 'm';
+  let whoopAutoSynced = false;
+  let whoopSyncing = false;
+
+  const settingsEls = {
+    bg: document.getElementById('settingsModalBg'),
+    open: document.getElementById('settingsOpenBtn'),
+    close: document.getElementById('settingsCloseBtn'),
+    heightCm: document.getElementById('settingsHeightCm'),
+    heightFt: document.getElementById('settingsHeightFt'),
+    heightIn: document.getElementById('settingsHeightIn'),
+    heightCmRow: document.getElementById('heightCmRow'),
+    heightFtRow: document.getElementById('heightFtRow'),
+    weight: document.getElementById('settingsWeight'),
+    weightSuffix: document.getElementById('weightUnitSuffix'),
+    age: document.getElementById('settingsAge'),
+    activity: document.getElementById('settingsActivity'),
+    save: document.getElementById('settingsSaveBtn'),
+    saved: document.getElementById('settingsSavedMsg'),
+    weightSeg: document.getElementById('weightUnitSeg'),
+    heightSeg: document.getElementById('heightUnitSeg'),
+    sexSeg: document.getElementById('sexSeg'),
+    whoopDot: document.getElementById('whoopDot'),
+    whoopStatusText: document.getElementById('whoopStatusText'),
+    whoopSyncLine: document.getElementById('whoopSyncLine'),
+    whoopRecovery: document.getElementById('whoopRecovery'),
+    whoopSleep: document.getElementById('whoopSleep'),
+    whoopRestHr: document.getElementById('whoopRestHr'),
+    whoopAction: document.getElementById('whoopActionBtn')
+  };
+
+  function defaultWaterStateForSettings() {
+    return {
+      unit: 'bottle',
+      bottleMl: 500,
+      glassMl: 250,
+      weightUnit: 'kg',
+      profile: {
+        weightKg: 75,
+        heightCm: 175,
+        heightUnit: 'cm',
+        age: 25,
+        sex: 'm',
+        activityHrsPerWeek: 5
+      },
+      caffeineMgPerDay: 200,
+      substances: [],
+      logs: {}
+    };
+  }
+  function loadWaterStateForSettings() {
+    const defaults = defaultWaterStateForSettings();
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(WATER_KEY)); } catch (e) {}
+    if (!saved || typeof saved !== 'object') saved = {};
+    return Object.assign({}, defaults, saved, {
+      profile: Object.assign({}, defaults.profile, saved.profile || {}),
+      logs: (saved.logs && typeof saved.logs === 'object') ? saved.logs : {}
+    });
+  }
+  function saveWaterStateForSettings(next) {
+    try { localStorage.setItem(WATER_KEY, JSON.stringify(next)); } catch (e) {}
+    window.dispatchEvent(new Event('storage'));
+  }
+  function num(v) {
+    const n = parseFloat(String(v == null ? '' : v).replace(',', '.'));
+    return Number.isFinite(n) ? n : null;
+  }
+  function round(n, d) {
+    const p = Math.pow(10, d || 0);
+    return Math.round(n * p) / p;
+  }
+  function setSeg(seg, value, attr) {
+    if (!seg) return;
+    seg.querySelectorAll('button').forEach((b) => {
+      b.classList.toggle('active', b.getAttribute(attr) === value);
+    });
+  }
+  function setWeightUnit(unit, convertVisible) {
+    if (convertVisible && currentWeightUnit !== unit) {
+      const value = num(settingsEls.weight.value);
+      if (value != null) {
+        const kg = currentWeightUnit === 'lb' ? value * KG_PER_LB : value;
+        settingsEls.weight.value = unit === 'lb' ? round(kg / KG_PER_LB, 1) : round(kg, 1);
+      }
+    }
+    currentWeightUnit = unit;
+    settingsEls.weightSuffix.textContent = unit;
+    setSeg(settingsEls.weightSeg, unit, 'data-unit');
+  }
+  function currentHeightCmFromFields() {
+    if (currentHeightUnit === 'ftin') {
+      return (num(settingsEls.heightFt.value) || 0) * CM_PER_FT +
+        (num(settingsEls.heightIn.value) || 0) * CM_PER_IN;
+    }
+    return num(settingsEls.heightCm.value) || 0;
+  }
+  function fillHeightFieldsFromCm(cm, unit) {
+    if (unit === 'ftin') {
+      const totalIn = cm / CM_PER_IN;
+      const ft = Math.floor(totalIn / 12);
+      const inches = totalIn - ft * 12;
+      settingsEls.heightFt.value = ft || '';
+      settingsEls.heightIn.value = Number.isFinite(inches) ? round(inches, 1) : '';
+    } else {
+      settingsEls.heightCm.value = cm ? round(cm, 1) : '';
+    }
+  }
+  function setHeightUnit(unit, convertVisible) {
+    const cm = convertVisible ? currentHeightCmFromFields() : (num(settingsEls.heightCm.value) || 0);
+    currentHeightUnit = unit;
+    settingsEls.heightCmRow.hidden = unit !== 'cm';
+    settingsEls.heightFtRow.hidden = unit !== 'ftin';
+    fillHeightFieldsFromCm(cm, unit);
+    setSeg(settingsEls.heightSeg, unit, 'data-unit');
+  }
+  function setSex(sex) {
+    currentSex = sex === 'f' ? 'f' : 'm';
+    setSeg(settingsEls.sexSeg, currentSex, 'data-sex');
+  }
+  function fillSettingsFromStorage() {
+    const state = loadWaterStateForSettings();
+    const p = state.profile || {};
+    currentWeightUnit = state.weightUnit === 'lb' ? 'lb' : 'kg';
+    currentHeightUnit = p.heightUnit === 'ftin' ? 'ftin' : 'cm';
+    settingsEls.weight.value = currentWeightUnit === 'lb'
+      ? round((p.weightKg || 75) / KG_PER_LB, 1)
+      : round(p.weightKg || 75, 1);
+    settingsEls.heightCm.value = round(p.heightCm || 175, 1);
+    settingsEls.age.value = p.age || '';
+    settingsEls.activity.value = p.activityHrsPerWeek != null ? p.activityHrsPerWeek : '';
+    setWeightUnit(currentWeightUnit, false);
+    setHeightUnit(currentHeightUnit, false);
+    fillHeightFieldsFromCm(p.heightCm || 175, currentHeightUnit);
+    setSex(p.sex || 'm');
+  }
+  function saveSettings() {
+    const state = loadWaterStateForSettings();
+    const p = Object.assign({}, state.profile || {});
+    const weightValue = num(settingsEls.weight.value);
+    if (weightValue != null && weightValue > 0) {
+      p.weightKg = currentWeightUnit === 'lb' ? weightValue * KG_PER_LB : weightValue;
+    }
+    const heightCm = currentHeightCmFromFields();
+    if (heightCm > 0) p.heightCm = heightCm;
+    p.heightUnit = currentHeightUnit;
+    const age = num(settingsEls.age.value);
+    if (age != null && age >= 0) p.age = Math.round(age);
+    p.sex = currentSex;
+    const active = num(settingsEls.activity.value);
+    if (active != null && active >= 0) p.activityHrsPerWeek = active;
+    state.profile = p;
+    state.weightUnit = currentWeightUnit;
+    saveWaterStateForSettings(state);
+    settingsEls.saved.classList.add('show');
+    clearTimeout(settingsEls.saved._t);
+    settingsEls.saved._t = setTimeout(() => settingsEls.saved.classList.remove('show'), 1800);
+  }
+  function openSettingsModal() {
+    fillSettingsFromStorage();
+    renderWhoopCard();
+    settingsEls.bg.classList.add('show');
+    settingsEls.bg.setAttribute('aria-hidden', 'false');
+    setTimeout(() => settingsEls.heightCm.focus(), 40);
+    if (!whoopAutoSynced && isWhoopConnected()) {
+      whoopAutoSynced = true;
+      syncWhoopNow();
+    }
+  }
+  function closeSettingsModal() {
+    settingsEls.bg.classList.remove('show');
+    settingsEls.bg.setAttribute('aria-hidden', 'true');
+  }
+
+  function readJsonKey(key) {
+    try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; }
+  }
+  function isWhoopConnected() {
+    const tokens = readJsonKey('whoop_tokens_v1');
+    if (!tokens || typeof tokens !== 'object') return false;
+    return Object.keys(tokens).some((k) => !!tokens[k]);
+  }
+  function timeAgo(ts) {
+    if (!ts) return 'Noch nicht synchronisiert';
+    const d = new Date(ts);
+    if (isNaN(d)) return 'Noch nicht synchronisiert';
+    const min = Math.max(0, Math.round((Date.now() - d.getTime()) / 60000));
+    if (min < 1) return 'Gerade synchronisiert';
+    if (min < 60) return 'Zuletzt vor ' + min + ' Min. synchronisiert';
+    const h = Math.round(min / 60);
+    return 'Zuletzt vor ' + h + ' Std. synchronisiert';
+  }
+  function pickNumber(obj, paths) {
+    for (const path of paths) {
+      const parts = path.split('.');
+      let cur = obj;
+      for (const part of parts) {
+        if (cur == null) break;
+        cur = cur[part];
+      }
+      if (typeof cur === 'number' && Number.isFinite(cur)) return cur;
+    }
+    return null;
+  }
+  function normalizePercent(n) {
+    if (n == null) return null;
+    return n <= 1 ? n * 100 : n;
+  }
+  function applyWhoopStats(stats) {
+    const recovery = normalizePercent(stats && stats.recovery);
+    const sleep = normalizePercent(stats && stats.sleep);
+    const restHr = stats && stats.restHr;
+    settingsEls.whoopRecovery.textContent = recovery != null ? Math.round(recovery) + '%' : '—';
+    settingsEls.whoopSleep.textContent = sleep != null ? Math.round(sleep) + '%' : '—';
+    settingsEls.whoopRestHr.textContent = restHr != null ? Math.round(restHr) : '—';
+  }
+  function renderWhoopCard() {
+    const connected = isWhoopConnected();
+    settingsEls.whoopDot.classList.toggle('connected', connected);
+    settingsEls.whoopStatusText.textContent = connected ? 'Verbunden' : 'Nicht verbunden';
+    const savedStats = readJsonKey('whoop_stats_v1') || {};
+    applyWhoopStats(savedStats);
+    if (connected) {
+      settingsEls.whoopSyncLine.textContent = timeAgo(localStorage.getItem('whoop_last_sync'));
+      settingsEls.whoopAction.textContent = whoopSyncing ? 'Synchronisiert…' : 'Jetzt synchronisieren';
+      settingsEls.whoopAction.removeAttribute('href');
+      settingsEls.whoopAction.setAttribute('role', 'button');
+      settingsEls.whoopAction.toggleAttribute('disabled', whoopSyncing);
+    } else {
+      settingsEls.whoopSyncLine.textContent = 'Mit Health verbinden, um WHOOP-Daten zu sehen.';
+      settingsEls.whoopAction.textContent = 'Auf Health verbinden';
+      settingsEls.whoopAction.href = 'health.html';
+      settingsEls.whoopAction.removeAttribute('role');
+      settingsEls.whoopAction.removeAttribute('disabled');
+      applyWhoopStats({});
+    }
+  }
+  async function fetchWhoopPath(path) {
+    const url = '/api/whoop-data?path=' + encodeURIComponent(path);
+    let res = await fetch(url, { headers: { Accept: 'application/json' } });
+    if (res.status === 401) {
+      const refresh = await fetch('/api/whoop-refresh', { method: 'POST', headers: { Accept: 'application/json' } });
+      if (!refresh.ok) throw new Error('WHOOP konnte nicht erneuert werden.');
+      res = await fetch(url, { headers: { Accept: 'application/json' } });
+    }
+    if (!res.ok) throw new Error('WHOOP Sync fehlgeschlagen.');
+    return res.json();
+  }
+  function statsFromWhoop(recoveryData, sleepData) {
+    return {
+      recovery: pickNumber(recoveryData, [
+        'score.recovery_score',
+        'records.0.score.recovery_score',
+        'data.0.score.recovery_score',
+        'recovery_score',
+        'score'
+      ]),
+      sleep: pickNumber(sleepData, [
+        'score.sleep_performance_percentage',
+        'records.0.score.sleep_performance_percentage',
+        'data.0.score.sleep_performance_percentage',
+        'sleep_performance_percentage',
+        'score.sleep_efficiency_percentage'
+      ]),
+      restHr: pickNumber(recoveryData, [
+        'score.resting_heart_rate',
+        'records.0.score.resting_heart_rate',
+        'data.0.score.resting_heart_rate',
+        'resting_heart_rate'
+      ])
+    };
+  }
+  async function syncWhoopNow() {
+    if (!isWhoopConnected() || whoopSyncing) return;
+    whoopSyncing = true;
+    renderWhoopCard();
+    try {
+      const [recovery, sleep] = await Promise.all([
+        fetchWhoopPath('/recovery'),
+        fetchWhoopPath('/activity/sleep')
+      ]);
+      const stats = statsFromWhoop(recovery, sleep);
+      localStorage.setItem('whoop_stats_v1', JSON.stringify(stats));
+      localStorage.setItem('whoop_last_sync', new Date().toISOString());
+      applyWhoopStats(stats);
+      settingsEls.whoopSyncLine.textContent = 'Gerade synchronisiert';
+    } catch (e) {
+      settingsEls.whoopSyncLine.textContent = 'Sync fehlgeschlagen. Bitte später erneut versuchen.';
+    } finally {
+      whoopSyncing = false;
+      renderWhoopCard();
+    }
+  }
+
+  settingsEls.open.addEventListener('click', openSettingsModal);
+  settingsEls.close.addEventListener('click', closeSettingsModal);
+  settingsEls.bg.addEventListener('click', (e) => {
+    if (e.target === settingsEls.bg) closeSettingsModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && settingsEls.bg.classList.contains('show')) closeSettingsModal();
+  });
+  settingsEls.save.addEventListener('click', saveSettings);
+  settingsEls.weightSeg.querySelectorAll('button').forEach((btn) => {
+    btn.addEventListener('click', () => setWeightUnit(btn.dataset.unit, true));
+  });
+  settingsEls.heightSeg.querySelectorAll('button').forEach((btn) => {
+    btn.addEventListener('click', () => setHeightUnit(btn.dataset.unit, true));
+  });
+  settingsEls.sexSeg.querySelectorAll('button').forEach((btn) => {
+    btn.addEventListener('click', () => setSex(btn.dataset.sex));
+  });
+  settingsEls.whoopAction.addEventListener('click', (e) => {
+    if (!isWhoopConnected()) return;
+    e.preventDefault();
+    syncWhoopNow();
+  });
 
   // ---------- Boot ----------
   rollover();
