@@ -74,6 +74,63 @@
       return out;
     }
 
+    function parseStored(raw) {
+      if (raw == null) return undefined;
+      try { return JSON.parse(raw); } catch (e) { return raw; }
+    }
+
+    function isPlainObject(value) {
+      return !!value && typeof value === 'object' && !Array.isArray(value);
+    }
+
+    function itemIdentity(item) {
+      if (!isPlainObject(item)) return JSON.stringify(item);
+      return item.id || item.key || item.date || item.day || item.name || item.title || JSON.stringify(item);
+    }
+
+    function mergeArrays(remoteArr, localArr) {
+      const out = remoteArr.slice();
+      const positions = new Map();
+      out.forEach((item, index) => positions.set(itemIdentity(item), index));
+
+      localArr.forEach((item) => {
+        const id = itemIdentity(item);
+        if (positions.has(id)) {
+          const index = positions.get(id);
+          out[index] = mergeValues(out[index], item);
+        } else {
+          positions.set(id, out.length);
+          out.push(item);
+        }
+      });
+
+      return out;
+    }
+
+    function mergeValues(remoteValue, localValue) {
+      if (localValue === undefined) return remoteValue;
+      if (remoteValue === undefined) return localValue;
+
+      if (Array.isArray(remoteValue) && Array.isArray(localValue)) {
+        return mergeArrays(remoteValue, localValue);
+      }
+
+      if (isPlainObject(remoteValue) && isPlainObject(localValue)) {
+        const out = Object.assign({}, remoteValue);
+        Object.keys(localValue).forEach((key) => {
+          out[key] = mergeValues(remoteValue[key], localValue[key]);
+        });
+        return out;
+      }
+
+      return remoteValue;
+    }
+
+    function mergeRemoteWithLocal(remoteValue, localRaw) {
+      const localValue = parseStored(localRaw);
+      return mergeValues(remoteValue, localValue);
+    }
+
     const origSet = localStorage.setItem.bind(localStorage);
     const origRemove = localStorage.removeItem.bind(localStorage);
 
@@ -94,8 +151,8 @@
       try {
         for (const k of Object.keys(remote)) {
           if (!matches(k)) continue;
-          const incoming = JSON.stringify(remote[k]);
           const local = localStorage.getItem(k);
+          const incoming = JSON.stringify(mergeRemoteWithLocal(remote[k], local));
           if (local !== incoming) {
             try { origSet(k, incoming); changed = true; } catch (e) {}
           }
