@@ -988,12 +988,17 @@ main {
       const el = document.getElementById(id);
       if (el) el.textContent = text;
     };
+    const formatCount = (n) => {
+      const value = Math.round((Number(n) || 0) * 10) / 10;
+      if (Math.abs(value - Math.round(value)) < 0.001) return String(Math.round(value));
+      return String(value).replace('.', ',');
+    };
     setText('healthStackPct', stackPct + '%');
     setText('healthWaterPct', waterPct + '%');
     setText('healthMissedCount', String(missedCount));
     setText('healthLowCount', String(low.length));
     setText('stackChartMeta', takenCount + '/' + total + ' heute');
-    setText('waterChartMeta', todayWater + '/' + waterTarget + ' heute');
+    setText('waterChartMeta', formatCount(todayWater) + '/' + waterTarget + ' heute');
 
     const days = [-6,-5,-4,-3,-2,-1,0].map(dateKeyFromOffset);
     renderMiniBars(document.getElementById('stackBars'), days.map((key) => {

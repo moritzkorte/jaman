@@ -555,6 +555,12 @@ body::after {
     return Math.max(0, Math.min(100, Math.round((done / total) * 100)));
   }
 
+  function formatCount(n) {
+    const value = Math.round((Number(n) || 0) * 10) / 10;
+    if (Math.abs(value - Math.round(value)) < 0.001) return String(Math.round(value));
+    return String(value).replace('.', ',');
+  }
+
   function readGoals(key) {
     const goals = storeGet('goals:' + key);
     const list = Array.isArray(goals) ? goals : [];
@@ -598,11 +604,11 @@ body::after {
     const pct = clampPct(data.done, data.total);
     item.classList.toggle('warn', statusClass(data.done, data.total) === 'warn');
     item.classList.toggle('bad', statusClass(data.done, data.total) === 'bad');
-    $('.today-value', item).textContent = data.done + '/' + data.total;
+    $('.today-value', item).textContent = formatCount(data.done) + '/' + data.total;
     $('.today-fill', item).style.width = pct + '%';
     let text = emptyText;
     if (data.total && data.open === 0) text = 'Alles erledigt.';
-    else if (data.total) text = data.open + ' ' + openUnit + ' offen.';
+    else if (data.total) text = formatCount(data.open) + ' ' + openUnit + ' offen.';
     $('.today-status', item).textContent = text;
     return pct;
   }

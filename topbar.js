@@ -272,6 +272,12 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
     return { done, total };
   }
 
+  function formatTopbarCount(n) {
+    const value = Math.round((Number(n) || 0) * 10) / 10;
+    if (Math.abs(value - Math.round(value)) < 0.001) return String(Math.round(value));
+    return String(value).replace('.', ',');
+  }
+
   function classifyStatus(done, total) {
     if (total === 0) return 'idle';
     if (done >= total) return 'good';
@@ -291,7 +297,7 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
     if (!waterEl) return;
     const w = getWaterProgress();
     const countEl = document.getElementById('topbarWaterCount');
-    if (countEl) countEl.textContent = w.total ? w.done + '/' + w.total : '0/0';
+    if (countEl) countEl.textContent = w.total ? formatTopbarCount(w.done) + '/' + w.total : '0/0';
     setPillStatus(waterEl, classifyStatus(w.done, w.total));
   }
 
