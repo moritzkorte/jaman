@@ -159,7 +159,7 @@ body::after {
 
 .habit-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 400px);
   gap: 14px;
   align-items: start;
 }
@@ -257,25 +257,33 @@ body::after {
   color: var(--text-tertiary); padding: 18px 0;
 }
 .gm-input-wrap {
-  display: grid; gap: 10px;
-  margin-top: 14px; padding-top: 14px;
+  display: grid; gap: 12px;
+  margin-top: 16px; padding-top: 16px;
   border-top: 1px solid rgba(255,255,255,0.06);
 }
 .gm-input, .gm-select {
   width: 100%; min-width: 0;
-  padding: 11px 14px;
+  padding: 12px 14px;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 12px; background: rgba(0,0,0,0.28);
   color: var(--text-primary);
   font-family: inherit; font-size: 14px; outline: none;
   transition: border-color 0.2s, background 0.2s;
 }
+.gm-textarea {
+  min-height: 82px;
+  resize: vertical;
+  line-height: 1.45;
+}
 .gm-input::placeholder { color: var(--text-tertiary); }
 .gm-input:focus, .gm-select:focus { border-color: rgba(255,255,255,0.28); background: rgba(0,0,0,0.36); }
 .form-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(120px, 0.8fr) minmax(100px, 0.6fr);
+  grid-template-columns: minmax(0, 1fr) minmax(92px, 0.45fr);
   gap: 8px;
+}
+.form-grid .habit-name-field {
+  grid-column: 1 / -1;
 }
 .gm-add, .gm-ghost {
   padding: 11px 18px; border-radius: 12px;
@@ -593,15 +601,15 @@ body::after {
           </div>
           <div class="gm-input-wrap">
             <div class="form-grid">
-              <input class="gm-input" id="habitName" type="text" placeholder="z. B. 10 Liegestütze" autocomplete="off">
+              <input class="gm-input habit-name-field" id="habitName" type="text" placeholder="z. B. 10 Liegestütze" autocomplete="off">
               <select class="gm-select" id="habitFrequency" aria-label="Rhythmus">
                 <option value="daily">Täglich</option>
                 <option value="weekly">Wöchentlich</option>
               </select>
               <input class="gm-input" id="habitTarget" type="number" min="1" max="7" step="1" value="1" aria-label="Ziel pro Woche">
             </div>
-            <input class="gm-input" id="habitCue" type="text" placeholder="Nach / Wenn … werde ich …">
-            <input class="gm-input" id="habitIdentity" type="text" placeholder="Identität: Ich bin jemand, der …">
+            <textarea class="gm-input gm-textarea" id="habitCue" rows="3" placeholder="Nach / Wenn … werde ich …"></textarea>
+            <textarea class="gm-input gm-textarea" id="habitIdentity" rows="3" placeholder="Identität: Ich bin jemand, der …"></textarea>
             <button class="gm-add" id="habitAdd" type="button">Gewohnheit hinzufügen</button>
           </div>
         </div>
@@ -1084,9 +1092,12 @@ body::after {
   }
 
   els.add.addEventListener('click', () => addHabitFromValues());
-  [els.name, els.cue, els.identity].forEach(input => {
+  els.name.addEventListener('keydown', e => {
+    if (e.key === 'Enter') addHabitFromValues();
+  });
+  [els.cue, els.identity].forEach(input => {
     input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') addHabitFromValues();
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) addHabitFromValues();
     });
   });
   els.frequency.addEventListener('change', () => {

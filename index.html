@@ -78,6 +78,132 @@ body::after {
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
+.today-overview {
+  position: relative;
+  margin: 0 0 14px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+  overflow: hidden;
+}
+.today-overview::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 78% 10%, rgba(107, 227, 164, 0.12), transparent 40%),
+    linear-gradient(180deg, rgba(255,255,255,0.028), transparent 60%);
+  pointer-events: none;
+}
+.today-head,
+.today-grid,
+.today-note {
+  position: relative;
+  z-index: 1;
+}
+.today-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.today-kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.today-title {
+  margin: 5px 0 0;
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+.today-score {
+  flex: 0 0 auto;
+  min-width: 78px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: var(--success);
+}
+.today-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.today-item {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.035);
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.today-item:hover { background: rgba(255,255,255,0.055); }
+.today-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.today-label {
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 750;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.today-value {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 850;
+  color: var(--text-secondary);
+}
+.today-bar {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.today-fill {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--success);
+  transition: width 0.25s ease;
+}
+.today-item.warn .today-fill { background: var(--warning); }
+.today-item.bad .today-fill { background: var(--danger); }
+.today-status {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.35;
+}
+.today-note {
+  margin: 13px 0 0;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.45;
+}
 
 .bento-grid {
   display: grid;
@@ -188,6 +314,10 @@ body::after {
 @media (max-width: 720px) {
   body { padding: max(22px, env(safe-area-inset-top)) 14px 54px; }
   .dash-title { font-size: 24px; }
+  .today-head { align-items: baseline; }
+  .today-title { font-size: 19px; }
+  .today-score { font-size: 24px; }
+  .today-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bento-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: 156px;
@@ -208,12 +338,61 @@ body::after {
   }
   .tile-title,
   .tile.big .tile-title { font-size: 25px; }
+  .today-overview { padding: 16px; }
+  .today-head { display: block; }
+  .today-score { margin-top: 6px; text-align: left; }
+  .today-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 <main class="page">
   <h1 class="dash-title">Dashboard</h1>
+
+  <section class="today-overview" aria-labelledby="todayOverviewTitle">
+    <div class="today-head">
+      <div>
+        <div class="today-kicker" id="todayDate">Heute</div>
+        <h2 class="today-title" id="todayOverviewTitle">Was heute noch offen ist</h2>
+      </div>
+      <div class="today-score" id="todayScore">0%</div>
+    </div>
+    <div class="today-grid" id="todayGrid">
+      <a class="today-item" href="main.html" data-kind="goals">
+        <div class="today-item-top">
+          <span class="today-label">Todos</span>
+          <span class="today-value">0/0</span>
+        </div>
+        <div class="today-bar"><span class="today-fill"></span></div>
+        <div class="today-status">Noch keine Ziele für heute.</div>
+      </a>
+      <a class="today-item" href="habits.html" data-kind="habits">
+        <div class="today-item-top">
+          <span class="today-label">Habits</span>
+          <span class="today-value">0/0</span>
+        </div>
+        <div class="today-bar"><span class="today-fill"></span></div>
+        <div class="today-status">Keine fälligen Habits.</div>
+      </a>
+      <a class="today-item" href="health.html" data-kind="stack">
+        <div class="today-item-top">
+          <span class="today-label">Stack</span>
+          <span class="today-value">0/0</span>
+        </div>
+        <div class="today-bar"><span class="today-fill"></span></div>
+        <div class="today-status">Noch nichts im Stack.</div>
+      </a>
+      <a class="today-item" href="po-water.html" data-kind="water">
+        <div class="today-item-top">
+          <span class="today-label">Wasser</span>
+          <span class="today-value">0/0</span>
+        </div>
+        <div class="today-bar"><span class="today-fill"></span></div>
+        <div class="today-status">Starte mit der ersten Flasche.</div>
+      </a>
+    </div>
+    <p class="today-note" id="todayNote">Lädt deinen Tagesstatus…</p>
+  </section>
 
   <section class="bento-grid" aria-label="Dashboard-Bereiche">
     <a class="tile big" href="main.html" style="--accent:#6BE3A4" aria-label="Main öffnen">
@@ -283,5 +462,188 @@ body::after {
     </a>
   </section>
 </main>
+<script>
+(function () {
+  'use strict';
+
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const storeGet = (key) => {
+    try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; }
+  };
+
+  function dateToKey(date) {
+    return date.getFullYear() + '-' +
+      String(date.getMonth() + 1).padStart(2, '0') + '-' +
+      String(date.getDate()).padStart(2, '0');
+  }
+
+  function activeDateKey() {
+    const now = new Date();
+    const d = new Date(now);
+    if (now.getHours() < 6) d.setDate(d.getDate() - 1);
+    return dateToKey(d);
+  }
+
+  function addDays(key, days) {
+    const parts = key.split('-').map(Number);
+    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+    d.setDate(d.getDate() + days);
+    return dateToKey(d);
+  }
+
+  function weekStartKey(key) {
+    const parts = key.split('-').map(Number);
+    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+    const day = (d.getDay() + 6) % 7;
+    d.setDate(d.getDate() - day);
+    return dateToKey(d);
+  }
+
+  function formatDateLabel(key) {
+    const parts = key.split('-').map(Number);
+    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+    const wk = ['So','Mo','Di','Mi','Do','Fr','Sa'][d.getDay()];
+    const mo = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'][d.getMonth()];
+    return wk + ', ' + mo + ' ' + d.getDate();
+  }
+
+  function createdKey(habit) {
+    const d = new Date(habit.createdAt || new Date().toISOString());
+    return dateToKey(d);
+  }
+
+  function isHabitDone(state, id, key) {
+    return !!(state.logs && state.logs[key] && state.logs[key][id]);
+  }
+
+  function weekDoneCount(state, habit, key) {
+    const start = weekStartKey(key);
+    let count = 0;
+    for (let i = 0; i < 7; i++) {
+      if (isHabitDone(state, habit.id, addDays(start, i))) count++;
+    }
+    return count;
+  }
+
+  function isHabitDue(state, habit, key) {
+    if (key < createdKey(habit)) return false;
+    if (habit.frequency === 'weekly') {
+      return weekDoneCount(state, habit, key) < (habit.targetPerWeek || 1);
+    }
+    return true;
+  }
+
+  function waterTargetUnits(state) {
+    const profile = state.profile || { weightKg: 75 };
+    const weightKg = state.weightUnit === 'lb' ? (profile.weightKg || 0) / 2.20462 : (profile.weightKg || 0);
+    const base = weightKg * 35;
+    const exercise = (profile.activityHrsPerWeek || 0) / 7 * 500;
+    const caffeine = Math.max(0, (state.caffeineMgPerDay || 0) - 200) * 1.5;
+    const substances = (state.substances || []).reduce((sum, item) => {
+      const dose = (item && item.dose != null ? item.dose : item && item.defaultDose) || 0;
+      return sum + Math.max(0, dose * ((item && item.mlPerUnit) || 0));
+    }, 0);
+    let adjust = 0;
+    if (profile.sex === 'm') adjust += 200;
+    if ((profile.age || 0) >= 50) adjust += 100;
+    const unit = state.unit === 'glass' ? (state.glassMl || 250) : state.unit === 'oz' ? 30 : state.unit === 'ml' ? 1 : (state.bottleMl || 500);
+    return Math.max(1, Math.ceil((base + exercise + caffeine + substances + adjust) / unit));
+  }
+
+  function clampPct(done, total) {
+    if (!total) return 100;
+    return Math.max(0, Math.min(100, Math.round((done / total) * 100)));
+  }
+
+  function readGoals(key) {
+    const goals = storeGet('goals:' + key);
+    const list = Array.isArray(goals) ? goals : [];
+    const done = list.filter((goal) => goal && goal.done).length;
+    return { done, total: list.length, open: Math.max(0, list.length - done) };
+  }
+
+  function readHabits(key) {
+    const state = storeGet('habits_v1') || { habits: [], logs: {} };
+    const habits = Array.isArray(state.habits) ? state.habits.filter((habit) => habit && !habit.archived) : [];
+    const due = habits.filter((habit) => isHabitDue(state, habit, key) || isHabitDone(state, habit.id, key));
+    const done = due.filter((habit) => isHabitDone(state, habit.id, key)).length;
+    return { done, total: due.length, open: Math.max(0, due.length - done) };
+  }
+
+  function readStack(key) {
+    const items = storeGet('stack:items') || [];
+    const taken = storeGet('stack:taken:' + key) || {};
+    const list = Array.isArray(items) ? items : [];
+    const done = list.filter((item) => item && taken[item.id]).length;
+    return { done, total: list.length, open: Math.max(0, list.length - done) };
+  }
+
+  function readWater(key) {
+    const state = storeGet('po_water_v1') || {};
+    const logs = state.logs || {};
+    const target = waterTargetUnits(state);
+    const done = logs[key] || 0;
+    return { done, total: target, open: Math.max(0, target - done) };
+  }
+
+  function statusClass(done, total) {
+    if (!total || done >= total) return '';
+    if (done / total < 0.5) return 'bad';
+    return 'warn';
+  }
+
+  function updateItem(kind, data, emptyText, openUnit) {
+    const item = document.querySelector('[data-kind="' + kind + '"]');
+    if (!item) return;
+    const pct = clampPct(data.done, data.total);
+    item.classList.toggle('warn', statusClass(data.done, data.total) === 'warn');
+    item.classList.toggle('bad', statusClass(data.done, data.total) === 'bad');
+    $('.today-value', item).textContent = data.done + '/' + data.total;
+    $('.today-fill', item).style.width = pct + '%';
+    let text = emptyText;
+    if (data.total && data.open === 0) text = 'Alles erledigt.';
+    else if (data.total) text = data.open + ' ' + openUnit + ' offen.';
+    $('.today-status', item).textContent = text;
+    return pct;
+  }
+
+  function renderTodayOverview() {
+    const key = activeDateKey();
+    const dateEl = document.getElementById('todayDate');
+    if (dateEl) dateEl.textContent = 'Heute · ' + formatDateLabel(key);
+
+    const goals = readGoals(key);
+    const habits = readHabits(key);
+    const stack = readStack(key);
+    const water = readWater(key);
+
+    const scores = [
+      updateItem('goals', goals, 'Noch keine Ziele für heute.', goals.open === 1 ? 'Todo' : 'Todos'),
+      updateItem('habits', habits, 'Keine fälligen Habits.', habits.open === 1 ? 'Habit' : 'Habits'),
+      updateItem('stack', stack, 'Noch nichts im Stack.', stack.open === 1 ? 'Item' : 'Items'),
+      updateItem('water', water, 'Starte mit der ersten Flasche.', water.open === 1 ? 'Einheit' : 'Einheiten')
+    ].filter((value) => typeof value === 'number');
+
+    const score = scores.length ? Math.round(scores.reduce((sum, value) => sum + value, 0) / scores.length) : 0;
+    document.getElementById('todayScore').textContent = score + '%';
+
+    const openParts = [];
+    if (goals.open) openParts.push(goals.open + ' Todo' + (goals.open === 1 ? '' : 's'));
+    if (habits.open) openParts.push(habits.open + ' Habit' + (habits.open === 1 ? '' : 's'));
+    if (stack.open) openParts.push(stack.open + ' Stack-Item' + (stack.open === 1 ? '' : 's'));
+    if (water.open) openParts.push(water.open + ' Wasser-Einheit' + (water.open === 1 ? '' : 'en'));
+
+    document.getElementById('todayNote').textContent = openParts.length
+      ? 'Noch offen: ' + openParts.join(', ') + '.'
+      : 'Alles sieht für heute erledigt aus.';
+  }
+
+  renderTodayOverview();
+  window.addEventListener('storage', renderTodayOverview);
+  window.addEventListener('focus', renderTodayOverview);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) renderTodayOverview(); });
+  window.addEventListener('goals-changed', renderTodayOverview);
+})();
+</script>
 </body>
 </html>
