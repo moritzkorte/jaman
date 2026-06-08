@@ -10,8 +10,8 @@
 (function () {
   'use strict';
 
-  const TOPBAR_SUPABASE_URL = 'PASTE-YOUR-SUPABASE-PROJECT-URL-HERE';
-  const TOPBAR_SUPABASE_KEY = 'PASTE-YOUR-SUPABASE-PUBLISHABLE-KEY-HERE';
+  const TOPBAR_SUPABASE_URL = 'https://zsngolrittdtyqhgdwxi.supabase.co';
+  const TOPBAR_SUPABASE_KEY = 'sb_publishable_dnuvjmDpB006xDjpnOx1XA_X1mQdPDs';
 
   const css = `
 .topbar {

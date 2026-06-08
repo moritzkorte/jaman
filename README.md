@@ -23,14 +23,14 @@ Du kannst jede `.html`-Datei direkt im Browser öffnen. Kein Build, keine Instal
 
 Jede App speichert Daten im Browser unter `localStorage`. Mit Supabase-Sync laufen die Daten zusätzlich über die Cloud.
 
-## Cloud-Sync einrichten
+## Cloud-Sync
 
-Supabase-Sync braucht zwei öffentliche Browser-Werte:
+Supabase-Sync ist für dieses Projekt bereits eingetragen. Die App nutzt diese öffentlichen Browser-Werte:
 
 - Project URL: `https://zsngolrittdtyqhgdwxi.supabase.co`
 - Publishable Key: in Supabase unter **Project Settings -> API** kopieren
 
-Beide Werte hier eintragen:
+Diese Dateien verwenden die Werte:
 
 - `sync.js`: `SUPABASE_URL`, `SUPABASE_KEY`
 - `topbar.js`: `TOPBAR_SUPABASE_URL`, `TOPBAR_SUPABASE_KEY`
