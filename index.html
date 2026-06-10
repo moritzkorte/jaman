@@ -390,18 +390,26 @@ body::after {
         <div class="today-bar"><span class="today-fill"></span></div>
         <div class="today-status">Starte mit der ersten Flasche.</div>
       </a>
+      <a class="today-item" href="planner.html" data-kind="planner">
+        <div class="today-item-top">
+          <span class="today-label">Plan</span>
+          <span class="today-value">0/0</span>
+        </div>
+        <div class="today-bar"><span class="today-fill"></span></div>
+        <div class="today-status">Noch keine Blöcke geplant.</div>
+      </a>
     </div>
     <p class="today-note" id="todayNote">Lädt deinen Tagesstatus…</p>
   </section>
 
   <section class="bento-grid" aria-label="Dashboard-Bereiche">
-    <a class="tile big" href="main.html" style="--accent:#6BE3A4" aria-label="Main öffnen">
+    <a class="tile big" href="planner.html" style="--accent:#F2C063" aria-label="Plan öffnen">
       <span class="tile-num">·01</span>
-      <span class="tile-icon" aria-hidden="true">🏠</span>
+      <span class="tile-icon" aria-hidden="true">🗓️</span>
       <span class="tile-spacer"></span>
-      <h2 class="tile-title">Main</h2>
+      <h2 class="tile-title">Plan</h2>
       <span class="tile-footer">
-        <span class="tile-subtitle">Goals &amp; daily plan</span>
+        <span class="tile-subtitle">Blöcke &amp; To-dos</span>
         <span class="tile-arrow" aria-hidden="true">→</span>
       </span>
     </a>
@@ -592,6 +600,17 @@ body::after {
     return { done, total: target, open: Math.max(0, target - done) };
   }
 
+  function readPlanner(key) {
+    const state = storeGet('planner:' + key) || { phases: [], inbox: [] };
+    const phases = Array.isArray(state.phases) ? state.phases : [];
+    const inbox = Array.isArray(state.inbox) ? state.inbox : [];
+    const todos = phases
+      .flatMap((phase) => Array.isArray(phase.todos) ? phase.todos : [])
+      .concat(inbox);
+    const done = todos.filter((todo) => todo && todo.done).length;
+    return { done, total: todos.length, open: Math.max(0, todos.length - done) };
+  }
+
   function statusClass(done, total) {
     if (!total || done >= total) return '';
     if (done / total < 0.5) return 'bad';
@@ -622,12 +641,14 @@ body::after {
     const habits = readHabits(key);
     const stack = readStack(key);
     const water = readWater(key);
+    const planner = readPlanner(key);
 
     const scores = [
       updateItem('goals', goals, 'Noch keine Ziele für heute.', goals.open === 1 ? 'Todo' : 'Todos'),
       updateItem('habits', habits, 'Keine fälligen Habits.', habits.open === 1 ? 'Habit' : 'Habits'),
       updateItem('stack', stack, 'Noch nichts im Stack.', stack.open === 1 ? 'Item' : 'Items'),
-      updateItem('water', water, 'Starte mit der ersten Flasche.', water.open === 1 ? 'Einheit' : 'Einheiten')
+      updateItem('water', water, 'Starte mit der ersten Flasche.', water.open === 1 ? 'Einheit' : 'Einheiten'),
+      updateItem('planner', planner, 'Noch keine Blöcke geplant.', planner.open === 1 ? 'Plan-To-do' : 'Plan-To-dos')
     ].filter((value) => typeof value === 'number');
 
     const score = scores.length ? Math.round(scores.reduce((sum, value) => sum + value, 0) / scores.length) : 0;
@@ -638,6 +659,7 @@ body::after {
     if (habits.open) openParts.push(habits.open + ' Habit' + (habits.open === 1 ? '' : 's'));
     if (stack.open) openParts.push(stack.open + ' Stack-Item' + (stack.open === 1 ? '' : 's'));
     if (water.open) openParts.push(water.open + ' Wasser-Einheit' + (water.open === 1 ? '' : 'en'));
+    if (planner.open) openParts.push(planner.open + ' Plan-To-do' + (planner.open === 1 ? '' : 's'));
 
     document.getElementById('todayNote').textContent = openParts.length
       ? 'Noch offen: ' + openParts.join(', ') + '.'

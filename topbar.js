@@ -10,9 +10,6 @@
 (function () {
   'use strict';
 
-  const TOPBAR_SUPABASE_URL = 'https://zsngolrittdtyqhgdwxi.supabase.co';
-  const TOPBAR_SUPABASE_KEY = 'sb_publishable_dnuvjmDpB006xDjpnOx1XA_X1mQdPDs';
-
   const css = `
 .topbar {
   position: sticky; top: 0; z-index: 40;
@@ -188,6 +185,9 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
   <a href="index.html" class="bottombar-tab" data-page="main">
     <span class="bottombar-tab-icon">🏠</span><span>Start</span>
   </a>
+  <a href="planner.html" class="bottombar-tab" data-page="planner">
+    <span class="bottombar-tab-icon">🗓️</span><span>Plan</span>
+  </a>
   <a href="health.html" class="bottombar-tab" data-page="health">
     <span class="bottombar-tab-icon">💊</span><span>Gesundheit</span>
   </a>
@@ -209,6 +209,7 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
 
   function currentPageKey() {
     const p = (window.location.pathname || '').toLowerCase();
+    if (p.endsWith('planner.html')) return 'planner';
     if (p.endsWith('health.html')) return 'health';
     if (p.endsWith('gym.html')) return 'fitness';
     return 'main';
@@ -314,21 +315,32 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
     };
   }
 
-  async function pushWaterMergedToSupabase(localWater) {
+  async function readDashboardState(appKey) {
+    const response = await fetch('/api/dashboard-state?key=' + encodeURIComponent(appKey), {
+      cache: 'no-store',
+      credentials: 'same-origin'
+    });
+    if (!response.ok) return {};
+    const body = await response.json();
+    return body && body.data && typeof body.data === 'object' ? body.data : {};
+  }
+
+  async function writeDashboardState(appKey, data) {
+    await fetch('/api/dashboard-state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ key: appKey, data })
+    });
+  }
+
+  async function pushWaterMergedToDashboardState(localWater) {
     if (window.location.pathname.endsWith('/health.html') ||
         window.location.pathname.endsWith('health.html')) return;
-    if (!window.supabase || !TOPBAR_SUPABASE_URL || !TOPBAR_SUPABASE_KEY) return;
-    if (TOPBAR_SUPABASE_URL.indexOf('PASTE-') === 0 || TOPBAR_SUPABASE_KEY.indexOf('PASTE-') === 0) return;
     try {
-      const supa = window.supabase.createClient(TOPBAR_SUPABASE_URL, TOPBAR_SUPABASE_KEY);
-      const { data } = await supa
-        .from('app_state').select('data').eq('key', 'health').maybeSingle();
-      const current = (data && data.data) || {};
+      const current = await readDashboardState('health');
       const merged = Object.assign({}, current, { po_water_v1: localWater });
-      await supa.from('app_state').upsert(
-        { key: 'health', data: merged, updated_at: new Date().toISOString() },
-        { onConflict: 'key' }
-      );
+      await writeDashboardState('health', merged);
     } catch (e) {}
   }
 
@@ -348,7 +360,7 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
       setTimeout(() => btn.classList.remove('flash'), 220);
     }
 
-    pushWaterMergedToSupabase(state);
+    pushWaterMergedToDashboardState(state);
   }
 
   function blockGesture(e) { e.preventDefault(); }

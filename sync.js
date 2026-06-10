@@ -26,10 +26,12 @@
     'po_coach_v1',
     'po_coach_workout_done',
     'po_coach_weights',
-    'po_coach_photos'
+    'po_coach_photos',
+    'planner:templates_v1'
   ];
   const GLOBAL_SYNCED_PREFIXES = [
     'goals:',
+    'planner:',
     'stack:taken:',
     'nw:'
   ];

@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<script src="lock.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050506">
+<meta name="color-scheme" content="dark">
+<title>Planner · Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="sync.js" defer></script>
+<script src="topbar.js" defer></script>
+<style>
+:root {
+  --text-primary: #FAFAFA;
+  --text-secondary: #B8B6B0;
+  --text-tertiary: #76746E;
+  --success: #6BE3A4;
+  --warning: #F2C063;
+  --danger: #FF6B6B;
+  --bg: #050506;
+  --glass: rgba(255,255,255,0.04);
+  --glass-strong: rgba(255,255,255,0.065);
+  --line: rgba(255,255,255,0.075);
+  --font: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --hour-height: 82px;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  padding: max(28px, env(safe-area-inset-top)) 20px 72px;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 82% 14%, rgba(224, 118, 88, 0.16), transparent 45%),
+    radial-gradient(circle at 18% 90%, rgba(180, 180, 200, 0.06), transparent 50%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: -2;
+  animation: drift 36s ease-in-out infinite alternate;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.014) 1px, transparent 1px);
+  background-size: 3px 3px;
+  pointer-events: none;
+  z-index: -1;
+}
+@keyframes drift {
+  0% { transform: translate3d(0,0,0); }
+  100% { transform: translate3d(-22px, 14px, 0); }
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+button {
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+button:active { transform: scale(0.98); }
+input,
+select {
+  min-height: 42px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  background: rgba(0,0,0,0.28);
+  color: var(--text-primary);
+  outline: none;
+}
+input:focus,
+select:focus {
+  border-color: rgba(242,192,99,0.42);
+  box-shadow: 0 0 0 4px rgba(242,192,99,0.10);
+}
+input::placeholder { color: var(--text-tertiary); }
+
+.page {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.dash-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.dash-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0;
+  background: linear-gradient(180deg, #FFFFFF 0%, #C7C4BC 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.planner-date-pill {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+.section { margin-top: 14px; }
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  color: var(--text-tertiary);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.section-title::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--text-tertiary);
+  opacity: 0.6;
+}
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent);
+}
+.gm-eyebrow {
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.planner-summary,
+.planner-create,
+.planner-board,
+.planner-inbox-card,
+.planner-phase {
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px;
+  background: var(--glass);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+}
+.day-ring-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  padding: 22px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.04);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+}
+.day-ring {
+  position: relative;
+  width: 168px;
+  height: 168px;
+  flex-shrink: 0;
+}
+.day-ring svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.day-ring-track {
+  fill: none;
+  stroke: rgba(255,255,255,0.06);
+  stroke-width: 8;
+}
+.day-ring-fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 60px 60px;
+  transition:
+    stroke 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.day-ring-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.day-ring-percent {
+  color: var(--text-primary);
+  font-size: 40px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  line-height: 1;
+}
+.day-ring-phase {
+  margin-top: 5px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.day-ring-clock {
+  margin-top: 2px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+.day-ring-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 280px;
+}
+.day-ring-status {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+.day-ring-remaining {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.day-ring-hours {
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.planner-summary {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: start;
+  padding: 18px;
+  overflow: hidden;
+}
+.planner-summary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 78% 12%, rgba(242,192,99,0.12), transparent 40%),
+    linear-gradient(180deg, rgba(255,255,255,0.028), transparent 60%);
+  pointer-events: none;
+}
+.planner-summary > * {
+  position: relative;
+  z-index: 1;
+}
+.planner-summary h2 {
+  margin: 5px 0 0;
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+.planner-summary-copy {
+  margin: 8px 0 0;
+  max-width: 620px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.planner-score {
+  min-width: 110px;
+  text-align: right;
+}
+.planner-score-number {
+  color: var(--success);
+  font-family: var(--font-mono);
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1;
+}
+.planner-score-label {
+  margin-top: 6px;
+  color: var(--text-tertiary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.planner-stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 16px;
+}
+.planner-stat {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 13px;
+  background: rgba(255,255,255,0.035);
+}
+.planner-stat strong {
+  display: block;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 18px;
+}
+.planner-stat span {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-tertiary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+.planner-create {
+  display: grid;
+  grid-template-columns: minmax(190px, 1fr) 128px 128px 150px auto;
+  gap: 9px;
+  align-items: end;
+  padding: 14px;
+}
+.planner-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.planner-field label {
+  color: var(--text-tertiary);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.gm-input {
+  width: 100%;
+  padding: 0 12px;
+  font-size: 14px;
+}
+.planner-action,
+.planner-small-btn,
+.planner-icon-btn {
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-primary);
+  font-weight: 780;
+  transition: background 0.16s, border-color 0.16s, color 0.16s, transform 0.10s;
+}
+.planner-action {
+  min-height: 42px;
+  padding: 0 16px;
+  background: linear-gradient(180deg, rgba(242,192,99,0.28), rgba(242,192,99,0.12));
+  border-color: rgba(242,192,99,0.22);
+}
+.planner-small-btn {
+  min-height: 38px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+.planner-icon-btn {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--text-tertiary);
+  font-size: 15px;
+}
+.planner-action:hover,
+.planner-small-btn:hover,
+.planner-icon-btn:hover {
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.07);
+  color: var(--text-primary);
+}
+.planner-icon-btn.danger:hover {
+  border-color: rgba(255,107,107,0.26);
+  color: var(--danger);
+}
+
+.planner-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 14px;
+  align-items: start;
+}
+.planner-board {
+  padding: 16px;
+  overflow: hidden;
+}
+.planner-board-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.planner-board-meta {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  font-weight: 700;
+}
+.planner-timeline {
+  position: relative;
+  min-height: calc(var(--hour-height) * 24);
+}
+.planner-scale,
+.planner-track {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+.planner-scale {
+  left: 0;
+  width: 64px;
+}
+.planner-track {
+  left: 72px;
+  right: 0;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+.planner-hour {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+}
+.planner-hour-label {
+  position: absolute;
+  left: 0;
+  width: 52px;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-align: right;
+}
+.planner-now-line {
+  position: absolute;
+  left: 72px;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(242,192,99,0.95), rgba(242,192,99,0));
+  box-shadow: 0 0 14px rgba(242,192,99,0.24);
+  z-index: 3;
+  pointer-events: none;
+}
+.planner-now-line::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--warning);
+}
+.planner-empty {
+  position: absolute;
+  top: 18px;
+  left: 88px;
+  right: 18px;
+  padding: 18px;
+  border: 1px dashed rgba(255,255,255,0.12);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.03);
+  color: var(--text-tertiary);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.planner-phase {
+  --phase-color: var(--warning);
+  position: absolute;
+  left: 14px;
+  right: 0;
+  min-height: 68px;
+  padding: 12px;
+  overflow: hidden;
+  z-index: 2;
+  box-shadow: 0 14px 38px rgba(0,0,0,0.32), inset 3px 0 0 var(--phase-color);
+}
+.planner-phase.is-active {
+  border-color: rgba(242,192,99,0.25);
+  background: rgba(255,255,255,0.055);
+}
+.planner-phase.has-overlap {
+  border-color: rgba(255,107,107,0.30);
+}
+.planner-phase.drag-over,
+.planner-inbox-card.drag-over,
+.planner-todo.drag-over {
+  border-color: rgba(242,192,99,0.44);
+  background: rgba(242,192,99,0.08);
+}
+.planner-phase-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.planner-drag {
+  flex: 0 0 auto;
+  color: var(--text-tertiary);
+  font-size: 18px;
+  line-height: 1;
+  cursor: grab;
+  user-select: none;
+}
+.planner-phase-main {
+  flex: 1;
+  min-width: 0;
+}
+.planner-phase-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.planner-phase-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 850;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+.planner-phase-meta {
+  margin-top: 4px;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.35;
+}
+.planner-phase-actions {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.planner-phase-count {
+  min-width: 42px;
+  padding: 9px 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 850;
+  text-align: right;
+}
+.planner-progress {
+  height: 6px;
+  margin: 11px 0 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.planner-progress span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--success);
+}
+.planner-todo-list {
+  display: grid;
+  gap: 7px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.planner-phase .planner-todo-list {
+  max-height: calc(100% - 110px);
+  overflow: auto;
+  padding-right: 2px;
+}
+.planner-todo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 7px 9px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.035);
+  color: var(--text-primary);
+}
+.planner-todo.is-done {
+  color: var(--text-secondary);
+  background: rgba(107,227,164,0.08);
+  border-color: rgba(107,227,164,0.16);
+}
+.planner-todo.is-done .planner-todo-text {
+  text-decoration: line-through;
+  text-decoration-color: rgba(255,255,255,0.35);
+  opacity: 0.72;
+}
+.planner-check {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  border-radius: 7px;
+  background: rgba(0,0,0,0.28);
+  cursor: pointer;
+}
+.planner-check:checked {
+  border-color: var(--success);
+  background: var(--success);
+  box-shadow: 0 0 12px rgba(107,227,164,0.35);
+}
+.planner-check:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #0A0A0B;
+  border-width: 0 2.2px 2.2px 0;
+  transform: rotate(45deg);
+}
+.planner-todo-text {
+  flex: 1;
+  min-width: 0;
+  color: inherit;
+  font-size: 13px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.planner-todo-source {
+  flex: 0 0 auto;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.planner-phase-add,
+.planner-inbox-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.planner-phase-add {
+  margin-top: 9px;
+}
+.planner-phase-add .gm-input,
+.planner-inbox-form .gm-input {
+  min-height: 38px;
+  font-size: 13px;
+}
+.planner-inbox-card {
+  position: sticky;
+  top: 72px;
+  padding: 16px;
+}
+.planner-inbox-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.planner-inbox-count {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 850;
+}
+.planner-inbox-form {
+  margin-bottom: 12px;
+}
+.planner-inbox-list {
+  min-height: 76px;
+  padding: 2px;
+  border-radius: 13px;
+}
+.planner-empty-list {
+  padding: 14px;
+  border: 1px dashed rgba(255,255,255,0.10);
+  border-radius: 13px;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+@media (max-width: 920px) {
+  .planner-create {
+    grid-template-columns: minmax(0, 1fr) 1fr 1fr;
+  }
+  .planner-create .planner-field:first-child,
+  .planner-create .planner-field:nth-child(4),
+  .planner-create .planner-action {
+    grid-column: 1 / -1;
+  }
+  .planner-layout {
+    grid-template-columns: 1fr;
+  }
+  .planner-inbox-card {
+    position: static;
+  }
+}
+@media (max-width: 560px) {
+  :root { --hour-height: 74px; }
+  body { padding: max(22px, env(safe-area-inset-top)) 14px 72px; }
+  .dash-title { font-size: 24px; }
+  .dash-header,
+  .planner-summary {
+    display: block;
+  }
+  .day-ring { width: 144px; height: 144px; }
+  .day-ring-percent { font-size: 32px; }
+  .day-ring-status { font-size: 13px; }
+  .planner-date-pill,
+  .planner-score {
+    margin-top: 10px;
+    text-align: left;
+  }
+  .planner-score-number { font-size: 28px; }
+  .planner-stat-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .planner-create {
+    grid-template-columns: 1fr 1fr;
+  }
+  .planner-create .planner-field:first-child,
+  .planner-create .planner-field:nth-child(4),
+  .planner-create .planner-action {
+    grid-column: 1 / -1;
+  }
+  .planner-board {
+    padding: 13px;
+  }
+  .planner-scale { width: 50px; }
+  .planner-track,
+  .planner-now-line {
+    left: 58px;
+  }
+  .planner-empty {
+    left: 70px;
+    right: 10px;
+  }
+  .planner-phase {
+    left: 9px;
+    padding: 10px;
+  }
+  .planner-phase-top {
+    display: block;
+  }
+  .planner-phase-actions {
+    margin-top: 8px;
+  }
+  .planner-phase-count {
+    display: inline-block;
+    padding-top: 8px;
+    text-align: left;
+  }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="dash-header">
+    <h1 class="dash-title">Planner</h1>
+    <div class="planner-date-pill" id="plannerDate">Heute</div>
+  </header>
+
+  <section class="day-ring-wrap" aria-label="Tageszeit übrig">
+    <div class="day-ring">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <defs>
+          <filter id="dayRingGlow" x="-45%" y="-45%" width="190%" height="190%">
+            <feGaussianBlur stdDeviation="3.2" result="blur"></feGaussianBlur>
+            <feMerge>
+              <feMergeNode in="blur"></feMergeNode>
+              <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+          </filter>
+        </defs>
+        <circle class="day-ring-track" cx="60" cy="60" r="52"></circle>
+        <circle class="day-ring-fill" cx="60" cy="60" r="52" id="dayRingFill" filter="url(#dayRingGlow)"></circle>
+      </svg>
+      <div class="day-ring-overlay">
+        <div class="day-ring-percent" id="dayRingPercent">—</div>
+        <div class="day-ring-phase" id="dayRingPhase">—</div>
+        <div class="day-ring-clock" id="dayRingClock">—</div>
+      </div>
+    </div>
+    <div class="day-ring-text">
+      <div class="day-ring-status" id="dayRingStatus">Lädt...</div>
+      <div class="day-ring-remaining" id="dayRingRemaining">—</div>
+      <div class="day-ring-hours">8:00 Uhr – 00:00 Uhr</div>
+    </div>
+  </section>
+
+  <section class="planner-summary" aria-labelledby="plannerTitle">
+    <div>
+      <div class="gm-eyebrow">Tagesstruktur</div>
+      <h2 id="plannerTitle">Dein Tag in Blöcken</h2>
+      <p class="planner-summary-copy">Plane erst die großen Blöcke deines Tages. Die To-dos liegen direkt im passenden Block und bleiben verschiebbar.</p>
+      <div class="planner-stat-row" aria-label="Planner Status">
+        <div class="planner-stat"><strong id="plannerPhaseCount">0</strong><span>Blöcke</span></div>
+        <div class="planner-stat"><strong id="plannerPlannedHours">0h</strong><span>Geplant</span></div>
+        <div class="planner-stat"><strong id="plannerTimeLeft">0h</strong><span>Zeit übrig</span></div>
+        <div class="planner-stat"><strong id="plannerInboxCount">0</strong><span>Offen</span></div>
+      </div>
+    </div>
+    <div class="planner-score" aria-label="Tagesfortschritt">
+      <div class="planner-score-number" id="plannerScore">0/0</div>
+      <div class="planner-score-label">erledigt</div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="phaseCreateTitle">
+    <div class="section-title" id="phaseCreateTitle">Block hinzufügen</div>
+    <form class="planner-create" id="phaseForm">
+      <div class="planner-field">
+        <label for="phaseTitleInput">Block</label>
+        <input id="phaseTitleInput" class="gm-input" placeholder="z. B. Work Session 1" autocomplete="off">
+      </div>
+      <div class="planner-field">
+        <label for="phaseStartInput">Start</label>
+        <input id="phaseStartInput" class="gm-input" type="time" value="09:00">
+      </div>
+      <div class="planner-field">
+        <label for="phaseEndInput">Ende</label>
+        <input id="phaseEndInput" class="gm-input" type="time" value="10:00">
+      </div>
+      <div class="planner-field">
+        <label for="phaseCategoryInput">Art</label>
+        <select id="phaseCategoryInput" class="gm-input">
+          <option value="work">Work</option>
+          <option value="school">Schule</option>
+          <option value="food">Essen</option>
+          <option value="gym">Gym</option>
+          <option value="reset">Routine</option>
+          <option value="free">Frei</option>
+        </select>
+      </div>
+      <button class="planner-action" type="submit">+ Block</button>
+    </form>
+  </section>
+
+  <section class="section" aria-labelledby="timelineTitle">
+    <div class="section-title" id="timelineTitle">00:00 bis 00:00</div>
+    <div class="planner-layout">
+      <section class="planner-board" aria-label="24-Stunden-Timeline">
+        <div class="planner-board-head">
+          <div class="gm-eyebrow">24h Plan</div>
+          <div class="planner-board-meta" id="plannerTimelineMeta">0 Blöcke</div>
+        </div>
+        <div class="planner-timeline" id="plannerTimeline"></div>
+      </section>
+
+      <aside class="planner-inbox-card" aria-labelledby="inboxTitle">
+        <div class="planner-inbox-head">
+          <div>
+            <div class="gm-eyebrow" id="inboxTitle">Noch nicht eingeplant</div>
+          </div>
+          <div class="planner-inbox-count" id="plannerInboxBadge">0</div>
+        </div>
+        <form class="planner-inbox-form" id="inboxForm">
+          <input id="inboxInput" class="gm-input" placeholder="To-do sammeln..." autocomplete="off">
+          <button class="planner-small-btn" type="submit">+</button>
+        </form>
+        <ul class="planner-todo-list planner-inbox-list" id="plannerInbox"></ul>
+      </aside>
+    </div>
+  </section>
+</main>
+<template id="plannerDragMarker"><span draggable="true"></span></template>
+<script>
+(function () {
+  'use strict';
+
+  const DEFAULT_COLORS = {
+    school: '#7DD3FC',
+    food: '#F2C063',
+    work: '#F2C063',
+    gym: '#6BE3A4',
+    reset: '#C4B5FD',
+    free: '#B8B6B0'
+  };
+  const HOUR_HEIGHT = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hour-height')) || 82;
+  const WAKE_HOUR = 8;
+  const SLEEP_HOUR = 24;
+  const DAY_RING_C = 2 * Math.PI * 52;
+  const dayRingFill = document.getElementById('dayRingFill');
+  if (dayRingFill) {
+    dayRingFill.setAttribute('stroke-dasharray', DAY_RING_C);
+    dayRingFill.setAttribute('stroke-dashoffset', DAY_RING_C);
+  }
+  const DAY_RING_PALETTE = [
+    [0, [255, 216, 158]],
+    [12.5, [255, 205, 121]],
+    [25, [255, 227, 143]],
+    [37.5, [255, 183, 106]],
+    [50, [255, 149, 89]],
+    [62.5, [243, 111, 79]],
+    [75, [226, 93, 122]],
+    [87.5, [123, 91, 176]],
+    [100, [47, 58, 102]]
+  ];
+
+  function uid(prefix) {
+    return prefix + '_' + Math.random().toString(36).slice(2, 9) + '_' + Date.now().toString(36);
+  }
+
+  function pad2(value) {
+    return String(value).padStart(2, '0');
+  }
+
+  function dateToKey(date) {
+    return date.getFullYear() + '-' +
+      pad2(date.getMonth() + 1) + '-' +
+      pad2(date.getDate());
+  }
+
+  function activeDateString() {
+    const now = new Date();
+    const d = new Date(now);
+    if (now.getHours() < 6) d.setDate(d.getDate() - 1);
+    return dateToKey(d);
+  }
+
+  function plannerKey() {
+    return 'planner:' + activeDateString();
+  }
+
+  function storeGet(key, fallback) {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(key));
+      return parsed || fallback;
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  function storeSet(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+    window.dispatchEvent(new CustomEvent('planner-changed'));
+    window.dispatchEvent(new Event('storage'));
+  }
+
+  function emptyDay() {
+    return { phases: [], inbox: [] };
+  }
+
+  function normalizeTodo(todo, index) {
+    return {
+      id: todo && todo.id ? todo.id : uid('todo'),
+      text: todo && todo.text ? String(todo.text) : 'Ohne Titel',
+      done: !!(todo && todo.done),
+      doneAt: todo && todo.doneAt ? todo.doneAt : null,
+      sortOrder: Number.isFinite(todo && todo.sortOrder) ? todo.sortOrder : index
+    };
+  }
+
+  function normalizePhase(phase, index) {
+    const category = phase && phase.category ? phase.category : 'work';
+    const todos = Array.isArray(phase && phase.todos) ? phase.todos.map(normalizeTodo) : [];
+    return {
+      id: phase && phase.id ? phase.id : uid('phase'),
+      title: phase && phase.title ? String(phase.title) : 'Neuer Block',
+      startTime: phase && phase.startTime ? phase.startTime : '09:00',
+      endTime: phase && phase.endTime ? phase.endTime : '10:00',
+      category,
+      color: phase && phase.color ? phase.color : DEFAULT_COLORS[category] || DEFAULT_COLORS.work,
+      sortOrder: Number.isFinite(phase && phase.sortOrder) ? phase.sortOrder : index,
+      todos
+    };
+  }
+
+  function readDay() {
+    const day = storeGet(plannerKey(), emptyDay());
+    return {
+      phases: Array.isArray(day.phases) ? day.phases.map(normalizePhase) : [],
+      inbox: Array.isArray(day.inbox) ? day.inbox.map(normalizeTodo) : []
+    };
+  }
+
+  function saveDay(day) {
+    restampOrder(day.phases);
+    day.phases.forEach((phase) => restampOrder(phase.todos || []));
+    restampOrder(day.inbox);
+    storeSet(plannerKey(), day);
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[char]);
+  }
+
+  function timeToMinutes(value) {
+    const parts = String(value || '00:00').split(':').map(Number);
+    const hours = Math.max(0, Math.min(24, parts[0] || 0));
+    const minutes = Math.max(0, Math.min(59, parts[1] || 0));
+    return Math.min(1440, hours * 60 + minutes);
+  }
+
+  function minutesToTime(total) {
+    const safe = Math.max(0, Math.min(1440, total));
+    const hours = Math.floor(safe / 60);
+    const minutes = safe % 60;
+    return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+  }
+
+  function durationMinutes(startTime, endTime) {
+    return Math.max(15, timeToMinutes(endTime) - timeToMinutes(startTime));
+  }
+
+  function durationLabel(startTime, endTime) {
+    const minutes = durationMinutes(startTime, endTime);
+    const hours = Math.floor(minutes / 60);
+    const rest = minutes % 60;
+    if (hours && rest) return hours + 'h ' + rest + 'm';
+    if (hours) return hours + 'h';
+    return rest + 'm';
+  }
+
+  function sortByOrder(list) {
+    return list.slice().sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+  }
+
+  function sortByTime(list) {
+    return list.slice().sort((a, b) => {
+      const startDiff = timeToMinutes(a.startTime) - timeToMinutes(b.startTime);
+      return startDiff || ((a.sortOrder || 0) - (b.sortOrder || 0));
+    });
+  }
+
+  function restampOrder(list) {
+    if (!Array.isArray(list)) return;
+    list.forEach((item, index) => { item.sortOrder = index; });
+  }
+
+  function formatDateLabel(key) {
+    const parts = key.split('-').map(Number);
+    const d = new Date(parts[0], parts[1] - 1, parts[2]);
+    const weekdays = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+    const months = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+    return weekdays[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate();
+  }
+
+  function nowMinutes() {
+    const now = new Date();
+    return now.getHours() * 60 + now.getMinutes();
+  }
+
+  function timeLeftLabel() {
+    const minutesLeft = Math.max(0, 1440 - nowMinutes());
+    const hours = Math.floor(minutesLeft / 60);
+    const minutes = minutesLeft % 60;
+    if (hours && minutes) return hours + 'h ' + minutes + 'm';
+    if (hours) return hours + 'h';
+    return minutes + 'm';
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function paletteAt(percent) {
+    if (percent <= DAY_RING_PALETTE[0][0]) return DAY_RING_PALETTE[0][1];
+    if (percent >= DAY_RING_PALETTE[DAY_RING_PALETTE.length - 1][0]) return DAY_RING_PALETTE[DAY_RING_PALETTE.length - 1][1];
+    for (let i = 0; i < DAY_RING_PALETTE.length - 1; i++) {
+      const current = DAY_RING_PALETTE[i];
+      const next = DAY_RING_PALETTE[i + 1];
+      if (percent >= current[0] && percent <= next[0]) {
+        const t = (percent - current[0]) / (next[0] - current[0]);
+        return [
+          lerp(current[1][0], next[1][0], t),
+          lerp(current[1][1], next[1][1], t),
+          lerp(current[1][2], next[1][2], t)
+        ];
+      }
+    }
+    return [255, 255, 255];
+  }
+
+  function rgb(color) {
+    return 'rgb(' + Math.round(color[0]) + ',' + Math.round(color[1]) + ',' + Math.round(color[2]) + ')';
+  }
+
+  function formatClock(date) {
+    return pad2(date.getHours()) + ':' + pad2(date.getMinutes());
+  }
+
+  function formatRemaining(totalMinutes) {
+    const minutes = Math.max(0, Math.floor(totalMinutes));
+    const hours = Math.floor(minutes / 60);
+    const rest = minutes % 60;
+    return hours + 'h ' + rest + 'm';
+  }
+
+  function updateDayRing() {
+    if (!dayRingFill) return;
+    const now = new Date();
+    const hours = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+    const percentEl = document.getElementById('dayRingPercent');
+    const phaseEl = document.getElementById('dayRingPhase');
+    const clockEl = document.getElementById('dayRingClock');
+    const statusEl = document.getElementById('dayRingStatus');
+    const remainingEl = document.getElementById('dayRingRemaining');
+
+    clockEl.textContent = formatClock(now);
+
+    if (hours < WAKE_HOUR) {
+      dayRingFill.setAttribute('stroke-dashoffset', DAY_RING_C);
+      dayRingFill.style.stroke = '#4D4B47';
+      percentEl.textContent = '—';
+      phaseEl.textContent = 'SCHLAFEN';
+      statusEl.textContent = 'Noch Schlafenszeit';
+      remainingEl.textContent = formatRemaining((WAKE_HOUR - hours) * 60) + ' bis zum Aufstehen';
+      return;
+    }
+
+    if (hours >= SLEEP_HOUR) {
+      dayRingFill.setAttribute('stroke-dashoffset', 0);
+      dayRingFill.style.stroke = '#E25D7A';
+      percentEl.textContent = '100%';
+      phaseEl.textContent = 'ZU SPÄT';
+      statusEl.textContent = 'Eigentlich Schlafenszeit';
+      remainingEl.textContent = 'Schlafen';
+      return;
+    }
+
+    const span = SLEEP_HOUR - WAKE_HOUR;
+    const percent = (hours - WAKE_HOUR) / span * 100;
+    dayRingFill.setAttribute('stroke-dashoffset', DAY_RING_C * (1 - percent / 100));
+    dayRingFill.style.stroke = rgb(paletteAt(percent));
+    percentEl.textContent = Math.floor(percent) + '%';
+
+    let phase = 'MORGEN';
+    let status = 'Morgen - frisch starten';
+    if (percent >= 25 && percent < 50) {
+      phase = 'MITTAG';
+      status = 'Mittag - dranbleiben';
+    } else if (percent >= 50 && percent < 75) {
+      phase = 'NACHMITTAG';
+      status = 'Nachmittag - weiterziehen';
+    } else if (percent >= 75 && percent < 90) {
+      phase = 'ABEND';
+      status = 'Abend - langsam abschließen';
+    } else if (percent >= 90) {
+      phase = 'SCHLAFENSZEIT';
+      status = 'Bald Schlafenszeit';
+    }
+
+    phaseEl.textContent = phase;
+    statusEl.textContent = status;
+    remainingEl.textContent = formatRemaining((SLEEP_HOUR - hours) * 60) + ' wache Zeit übrig';
+  }
+
+  function isActivePhase(phase) {
+    const current = nowMinutes();
+    return current >= timeToMinutes(phase.startTime) && current < timeToMinutes(phase.endTime);
+  }
+
+  function hasOverlap(phase, phases) {
+    const start = timeToMinutes(phase.startTime);
+    const end = timeToMinutes(phase.endTime);
+    return phases.some((other) => {
+      if (other.id === phase.id) return false;
+      return start < timeToMinutes(other.endTime) && end > timeToMinutes(other.startTime);
+    });
+  }
+
+  function renderPlanner() {
+    const day = readDay();
+    renderSummary(day);
+    renderTimeline(day);
+    renderInbox(day);
+  }
+
+  function renderSummary(day) {
+    const allTodos = day.phases.flatMap((phase) => phase.todos || []).concat(day.inbox || []);
+    const done = allTodos.filter((todo) => todo.done).length;
+    const plannedMinutes = day.phases.reduce((sum, phase) => sum + durationMinutes(phase.startTime, phase.endTime), 0);
+    const plannedHours = Math.round((plannedMinutes / 60) * 10) / 10;
+    document.getElementById('plannerScore').textContent = done + '/' + allTodos.length;
+    document.getElementById('plannerDate').textContent = 'Heute · ' + formatDateLabel(activeDateString());
+    document.getElementById('plannerPhaseCount').textContent = String(day.phases.length);
+    document.getElementById('plannerPlannedHours').textContent = String(plannedHours).replace('.', ',') + 'h';
+    document.getElementById('plannerTimeLeft').textContent = timeLeftLabel();
+    document.getElementById('plannerInboxCount').textContent = String(day.inbox.length);
+  }
+
+  function renderTimeline(day) {
+    const root = document.getElementById('plannerTimeline');
+    root.innerHTML = '';
+
+    const scale = document.createElement('div');
+    scale.className = 'planner-scale';
+    const track = document.createElement('div');
+    track.className = 'planner-track';
+    root.append(scale, track);
+
+    for (let hour = 0; hour <= 24; hour++) {
+      const top = hour * HOUR_HEIGHT;
+      const label = document.createElement('div');
+      label.className = 'planner-hour-label';
+      label.style.top = top + 'px';
+      label.textContent = String(hour).padStart(2, '0') + ':00';
+      scale.appendChild(label);
+
+      const line = document.createElement('div');
+      line.className = 'planner-hour';
+      line.style.top = top + 'px';
+      track.appendChild(line);
+    }
+
+    const current = nowMinutes();
+    const nowLine = document.createElement('div');
+    nowLine.className = 'planner-now-line';
+    nowLine.style.top = ((current / 60) * HOUR_HEIGHT) + 'px';
+    root.appendChild(nowLine);
+
+    const phases = sortByTime(day.phases);
+    document.getElementById('plannerTimelineMeta').textContent = phases.length + (phases.length === 1 ? ' Block' : ' Blöcke');
+    if (!phases.length) {
+      const empty = document.createElement('div');
+      empty.className = 'planner-empty';
+      empty.innerHTML = '<div class="gm-eyebrow">Noch keine Blöcke</div><div style="margin-top:8px">Lege deinen ersten Block an, zum Beispiel Schule, Work Session, Gym oder Abendroutine.</div>';
+      root.appendChild(empty);
+      return;
+    }
+
+    phases.forEach((phase) => track.appendChild(buildPhaseCard(day, phase, phases)));
+  }
+
+  function renderInbox(day) {
+    const root = document.getElementById('plannerInbox');
+    root.innerHTML = '';
+    document.getElementById('plannerInboxBadge').textContent = String(day.inbox.length);
+    root.addEventListener('dragover', markDragOver);
+    root.addEventListener('dragleave', clearDragOver);
+    root.addEventListener('drop', handleDropOnInbox);
+
+    const todos = sortByOrder(day.inbox);
+    if (!todos.length) {
+      const empty = document.createElement('li');
+      empty.className = 'planner-empty-list';
+      empty.textContent = 'Sammle hier To-dos, die noch keinen Platz im Tag haben.';
+      root.appendChild(empty);
+      return;
+    }
+    todos.forEach((todo) => root.appendChild(buildTodoRow(day, todo, { type: 'inbox' })));
+  }
+
+  function buildPhaseCard(day, phase, phases) {
+    const card = document.createElement('article');
+    const start = timeToMinutes(phase.startTime);
+    const height = Math.max(68, (durationMinutes(phase.startTime, phase.endTime) / 60) * HOUR_HEIGHT);
+    const todos = Array.isArray(phase.todos) ? phase.todos : [];
+    const done = todos.filter((todo) => todo.done).length;
+    const pct = todos.length ? Math.round((done / todos.length) * 100) : 0;
+    const overlap = hasOverlap(phase, phases);
+
+    card.className = 'planner-phase' + (isActivePhase(phase) ? ' is-active' : '') + (overlap ? ' has-overlap' : '');
+    card.style.top = ((start / 60) * HOUR_HEIGHT) + 'px';
+    card.style.height = height + 'px';
+    card.style.setProperty('--phase-color', phase.color || DEFAULT_COLORS.work);
+    card.setAttribute('draggable', 'true');
+    card.dataset.phaseId = phase.id;
+    card.addEventListener('dragstart', (event) => {
+      event.dataTransfer.setData('text/plain', JSON.stringify({ type: 'phase', phaseId: phase.id }));
+    });
+    card.addEventListener('dragover', markDragOver);
+    card.addEventListener('dragleave', clearDragOver);
+    card.addEventListener('drop', (event) => handleDropOnPhase(event, phase.id));
+
+    card.innerHTML =
+      '<div class="planner-phase-head">' +
+        '<div class="planner-drag" aria-hidden="true">⋮⋮</div>' +
+        '<div class="planner-phase-main">' +
+          '<div class="planner-phase-top">' +
+            '<div>' +
+              '<h3 class="planner-phase-title">' + escapeHtml(phase.title) + '</h3>' +
+              '<div class="planner-phase-meta">' + escapeHtml(phase.startTime) + ' - ' + escapeHtml(phase.endTime) + ' · ' + durationLabel(phase.startTime, phase.endTime) + (overlap ? ' · Überlappt' : '') + '</div>' +
+            '</div>' +
+            '<div class="planner-phase-actions">' +
+              '<div class="planner-phase-count">' + done + '/' + todos.length + '</div>' +
+              '<button class="planner-icon-btn" type="button" aria-label="Block bearbeiten">✎</button>' +
+              '<button class="planner-icon-btn danger" type="button" aria-label="Block löschen">×</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="planner-progress"><span style="width:' + pct + '%"></span></div>' +
+          '<ul class="planner-todo-list"></ul>' +
+          '<form class="planner-phase-add">' +
+            '<input class="gm-input" placeholder="To-do in diesen Block..." autocomplete="off">' +
+            '<button class="planner-small-btn" type="submit">+</button>' +
+          '</form>' +
+        '</div>' +
+      '</div>';
+
+    const list = card.querySelector('.planner-todo-list');
+    sortByOrder(todos).forEach((todo) => list.appendChild(buildTodoRow(day, todo, { type: 'phase', phaseId: phase.id })));
+    card.querySelector('.planner-phase-add').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const input = event.currentTarget.querySelector('input');
+      addTodoToPhase(phase.id, input.value);
+      input.value = '';
+    });
+    card.querySelector('[aria-label="Block bearbeiten"]').addEventListener('click', () => editPhase(phase.id));
+    card.querySelector('[aria-label="Block löschen"]').addEventListener('click', () => deletePhase(phase.id));
+    return card;
+  }
+
+  function buildTodoRow(day, todo, source) {
+    const li = document.createElement('li');
+    li.className = 'planner-todo' + (todo.done ? ' is-done' : '');
+    li.setAttribute('draggable', 'true');
+    li.dataset.todoId = todo.id;
+    li.innerHTML =
+      '<span class="planner-drag" aria-hidden="true">⋮</span>' +
+      '<input class="planner-check" type="checkbox" aria-label="To-do erledigt">' +
+      '<span class="planner-todo-text">' + escapeHtml(todo.text) + '</span>' +
+      '<span class="planner-todo-source">' + (source.type === 'phase' ? 'Block' : 'Inbox') + '</span>' +
+      '<button class="planner-icon-btn danger" type="button" aria-label="To-do löschen">×</button>';
+    li.querySelector('.planner-check').checked = !!todo.done;
+    li.querySelector('.planner-check').addEventListener('change', (event) => toggleTodo(source, todo.id, event.target.checked));
+    li.querySelector('[aria-label="To-do löschen"]').addEventListener('click', () => deleteTodo(source, todo.id));
+    li.addEventListener('dragstart', (event) => {
+      event.stopPropagation();
+      event.dataTransfer.setData('text/plain', JSON.stringify({ type: 'todo', todoId: todo.id, source }));
+    });
+    li.addEventListener('dragover', markDragOver);
+    li.addEventListener('dragleave', clearDragOver);
+    li.addEventListener('drop', (event) => handleDropOnTodo(event, source, todo.id));
+    return li;
+  }
+
+  function markDragOver(event) {
+    event.preventDefault();
+    if (event.currentTarget && event.currentTarget.classList) {
+      event.currentTarget.classList.add('drag-over');
+    }
+  }
+
+  function clearDragOver(event) {
+    if (event.currentTarget && event.currentTarget.classList) {
+      event.currentTarget.classList.remove('drag-over');
+    }
+  }
+
+  function parseDrag(event) {
+    try { return JSON.parse(event.dataTransfer.getData('text/plain')); } catch (e) { return null; }
+  }
+
+  function getTodoList(day, source) {
+    if (!source) return null;
+    if (source.type === 'inbox') return day.inbox;
+    const phase = day.phases.find((item) => item.id === source.phaseId);
+    if (!phase) return null;
+    phase.todos = Array.isArray(phase.todos) ? phase.todos : [];
+    return phase.todos;
+  }
+
+  function takeTodo(day, payload) {
+    if (!payload || payload.type !== 'todo') return null;
+    const list = getTodoList(day, payload.source);
+    if (!Array.isArray(list)) return null;
+    const index = list.findIndex((todo) => todo.id === payload.todoId);
+    if (index < 0) return null;
+    return list.splice(index, 1)[0];
+  }
+
+  function restampAll(day) {
+    restampOrder(day.inbox);
+    restampOrder(day.phases);
+    day.phases.forEach((phase) => restampOrder(phase.todos || []));
+  }
+
+  function handleDropOnPhase(event, phaseId) {
+    event.preventDefault();
+    event.stopPropagation();
+    clearDragOver(event);
+    const payload = parseDrag(event);
+    const day = readDay();
+
+    if (payload && payload.type === 'phase' && payload.phaseId !== phaseId) {
+      const from = day.phases.find((phase) => phase.id === payload.phaseId);
+      const to = day.phases.find((phase) => phase.id === phaseId);
+      if (from && to) {
+        const fromStart = from.startTime;
+        const fromEnd = from.endTime;
+        from.startTime = to.startTime;
+        from.endTime = to.endTime;
+        to.startTime = fromStart;
+        to.endTime = fromEnd;
+        saveDay(day);
+      }
+      return;
+    }
+
+    if (payload && payload.type === 'todo') {
+      const todo = takeTodo(day, payload);
+      const phase = day.phases.find((item) => item.id === phaseId);
+      if (todo && phase) {
+        phase.todos = Array.isArray(phase.todos) ? phase.todos : [];
+        phase.todos.push(todo);
+        restampAll(day);
+        saveDay(day);
+      }
+    }
+  }
+
+  function handleDropOnTodo(event, targetSource, beforeTodoId) {
+    event.preventDefault();
+    event.stopPropagation();
+    clearDragOver(event);
+    const payload = parseDrag(event);
+    if (!payload || payload.type !== 'todo' || payload.todoId === beforeTodoId) return;
+    const day = readDay();
+    const todo = takeTodo(day, payload);
+    const targetList = getTodoList(day, targetSource);
+    if (!todo || !Array.isArray(targetList)) return;
+    const targetIndex = targetList.findIndex((item) => item.id === beforeTodoId);
+    if (targetIndex < 0) targetList.push(todo);
+    else targetList.splice(targetIndex, 0, todo);
+    restampAll(day);
+    saveDay(day);
+  }
+
+  function handleDropOnInbox(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    clearDragOver(event);
+    const payload = parseDrag(event);
+    const day = readDay();
+    const todo = takeTodo(day, payload);
+    if (!todo) return;
+    day.inbox.push(todo);
+    restampAll(day);
+    saveDay(day);
+  }
+
+  function addPhase(title, startTime, endTime, category) {
+    if (!title || !title.trim()) return;
+    const start = timeToMinutes(startTime);
+    const end = timeToMinutes(endTime);
+    const safeEnd = end > start ? endTime : minutesToTime(Math.min(1440, start + 60));
+    const day = readDay();
+    day.phases.push({
+      id: uid('phase'),
+      title: title.trim(),
+      startTime,
+      endTime: safeEnd,
+      category,
+      color: DEFAULT_COLORS[category] || DEFAULT_COLORS.work,
+      sortOrder: day.phases.length,
+      todos: []
+    });
+    saveDay(day);
+  }
+
+  function addInboxTodo(text) {
+    if (!text || !text.trim()) return;
+    const day = readDay();
+    day.inbox.push({ id: uid('todo'), text: text.trim(), done: false, doneAt: null, sortOrder: day.inbox.length });
+    saveDay(day);
+  }
+
+  function addTodoToPhase(phaseId, text) {
+    if (!text || !text.trim()) return;
+    const day = readDay();
+    const phase = day.phases.find((item) => item.id === phaseId);
+    if (!phase) return;
+    phase.todos = Array.isArray(phase.todos) ? phase.todos : [];
+    phase.todos.push({ id: uid('todo'), text: text.trim(), done: false, doneAt: null, sortOrder: phase.todos.length });
+    saveDay(day);
+  }
+
+  function toggleTodo(source, todoId, done) {
+    const day = readDay();
+    const list = getTodoList(day, source);
+    const todo = Array.isArray(list) ? list.find((item) => item.id === todoId) : null;
+    if (!todo) return;
+    todo.done = done;
+    todo.doneAt = done ? Date.now() : null;
+    saveDay(day);
+  }
+
+  function deleteTodo(source, todoId) {
+    const day = readDay();
+    const list = getTodoList(day, source);
+    if (!Array.isArray(list)) return;
+    const index = list.findIndex((todo) => todo.id === todoId);
+    if (index < 0) return;
+    list.splice(index, 1);
+    restampAll(day);
+    saveDay(day);
+  }
+
+  function editPhase(phaseId) {
+    const day = readDay();
+    const phase = day.phases.find((item) => item.id === phaseId);
+    if (!phase) return;
+    const title = window.prompt('Name des Blocks', phase.title);
+    if (title == null || !title.trim()) return;
+    const startTime = window.prompt('Startzeit', phase.startTime);
+    if (startTime == null || !/^\d{2}:\d{2}$/.test(startTime)) return;
+    const endTime = window.prompt('Endzeit', phase.endTime);
+    if (endTime == null || !/^\d{2}:\d{2}$/.test(endTime)) return;
+    phase.title = title.trim();
+    phase.startTime = startTime;
+    phase.endTime = timeToMinutes(endTime) > timeToMinutes(startTime)
+      ? endTime
+      : minutesToTime(Math.min(1440, timeToMinutes(startTime) + 60));
+    saveDay(day);
+  }
+
+  function deletePhase(phaseId) {
+    const day = readDay();
+    const index = day.phases.findIndex((phase) => phase.id === phaseId);
+    if (index < 0) return;
+    const phase = day.phases[index];
+    const todos = Array.isArray(phase.todos) ? phase.todos : [];
+    let moveTodos = true;
+    if (todos.length) {
+      moveTodos = window.confirm('To-dos aus diesem Block nach "Noch nicht eingeplant" verschieben? Abbrechen löscht die To-dos mit dem Block.');
+    }
+    if (!moveTodos && todos.length && !window.confirm('Block und enthaltene To-dos wirklich löschen?')) return;
+    if (moveTodos) day.inbox = day.inbox.concat(todos);
+    day.phases.splice(index, 1);
+    restampAll(day);
+    saveDay(day);
+  }
+
+  document.getElementById('phaseForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const titleInput = document.getElementById('phaseTitleInput');
+    const startInput = document.getElementById('phaseStartInput');
+    const endInput = document.getElementById('phaseEndInput');
+    const categoryInput = document.getElementById('phaseCategoryInput');
+    addPhase(titleInput.value, startInput.value || '09:00', endInput.value || '10:00', categoryInput.value || 'work');
+    titleInput.value = '';
+  });
+
+  document.getElementById('inboxForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const input = document.getElementById('inboxInput');
+    addInboxTodo(input.value);
+    input.value = '';
+  });
+
+  if (!localStorage.getItem('planner:templates_v1')) {
+    localStorage.setItem('planner:templates_v1', JSON.stringify([]));
+  }
+
+  window.addEventListener('planner-changed', renderPlanner);
+  renderPlanner();
+  updateDayRing();
+  setInterval(renderPlanner, 60 * 1000);
+  setInterval(updateDayRing, 60 * 1000);
+
+  function startPlannerSync() {
+    if (typeof initCloudSync !== 'function') return;
+    initCloudSync({
+      appKey: 'planner',
+      syncedKeys: ['planner:templates_v1'],
+      syncedPrefixes: ['planner:'],
+      onApplied: () => {
+        renderPlanner();
+        updateDayRing();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startPlannerSync, { once: true });
+  } else {
+    startPlannerSync();
+  }
+})();
+</script>
+</body>
+</html>
